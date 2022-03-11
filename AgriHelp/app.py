@@ -4,10 +4,15 @@ from flask import Flask, render_template
 # create the application object
 app = Flask(__name__)
 
+
 # use decorators to link the function to a url
 @app.route('/')
 def home_page():
     return render_template('base.html')
+
+@app.route('/login')
+def login_page():
+    return render_template('login.html')
 
 
 # start the server with the 'run()' method
