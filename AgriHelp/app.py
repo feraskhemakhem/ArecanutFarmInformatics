@@ -1,13 +1,9 @@
 # import the Flask class from the flask module
-from flask import Flask, render_template, request
-
+from flask import Flask, render_template, request, redirect, url_for
 import db
 
-# create the application object
 app = Flask(__name__)
 
-
-# use decorators to link the function to a url
 @app.route('/')
 def home_page():
     return render_template('base.html')
@@ -44,7 +40,26 @@ def signup_page():
             print(user_id)
     return render_template('signup.html', var=user_id)
 
+# @app.route('/login', methods=["GET","POST"])
+# def login_page():
+#     if request.method == 'POST':
+#         username = request.form['uname']
+#         password = request.form['pwd']
+#         return '<p>User logged in</p>' #render landing page
+#     return render_template('login.html')
 
-# start the server with the 'run()' method
-if __name__ == '__main__':
+
+@app.route('/signup', methods=["GET","POST"])
+def sign_up():
+    if request.method == 'POST':
+        username = request.form['Username']
+        email = request.form['email']
+        password = request.form['password']
+        return '<p>User account created and logged in</p>'#render landing page
+    return render_template('SignUp.html')
+
+
+
+
+if '__main__' == __name__:
     app.run()
