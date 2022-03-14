@@ -1,18 +1,43 @@
 # import the Flask class from the flask module
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
+import rds_db as db
 
-# create the application object
 app = Flask(__name__)
 
-# use decorators to link the function to a url
 @app.route('/')
-def home():
-    return "Hello, World!"  # return a string
+def home_page():
+    return render_template('base.html')
 
-@app.route('/welcome')
-def welcome():
-    return render_template('welcome.html')  # render a template
+@app.route('/login', methods=['GET', 'POST'])
+def login_page():
+    # if we get a form request to log in
+    if request.method == 'POST':
+        username = request.form['Username']
+        password = request.form['password']
+        try:
+            user_id = db.get_user(username, password)
+        except Exception as e:
+            return render_template('login.html', var=e)
+        # if valid user_id, reroute to landing page of user
+        return render_template('base.html')
 
-# start the server with the 'run()' method
-if __name__ == '__main__':
-    app.run(debug=True)
+    return render_template('login.html')
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup_page():
+    # if we get a form request to sign up
+    if request.method == 'POST':
+        username = request.form['Username']
+        email = request.form['email']
+        password = request.form['password']
+        confirm_password = request.form['password2']
+        # call db function
+        try:
+            user_id = db.insert_new_user(username, email, password, confirm_password)
+        except Exception as e:
+            return render_template('signup.html', var=e)
+        return render_template('base.html')
+    return render_template('signup.html')
+
+if '__main__' == __name__:
+    app.run()
