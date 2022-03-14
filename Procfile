@@ -1,1 +1,1 @@
-web: gunicorn AgriHelp/app.py app:app
+web: gunicorn --AgriHelp/app.py app app.wsgi
