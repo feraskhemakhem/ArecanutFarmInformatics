@@ -10,8 +10,8 @@ config = dotenv_values('.env')
 
 # connect to aws
 conn = pymysql.connect(
-        host = config['HOSt'],
-        port = config['PORT'],
+        host = config['HOST'],
+        port = int(config['PORT']),
         user = config['USER'],    
         password = config['PASSWORD'],
         db = config['DB'],

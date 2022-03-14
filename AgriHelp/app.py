@@ -1,6 +1,6 @@
 # import the Flask class from the flask module
 from flask import Flask, render_template, request, redirect, url_for
-import db
+import rds_db as db
 
 app = Flask(__name__)
 
@@ -49,14 +49,14 @@ def signup_page():
 #     return render_template('login.html')
 
 
-@app.route('/signup', methods=["GET","POST"])
-def sign_up():
-    if request.method == 'POST':
-        username = request.form['Username']
-        email = request.form['email']
-        password = request.form['password']
-        return '<p>User account created and logged in</p>'#render landing page
-    return render_template('SignUp.html')
+# @app.route('/signup', methods=["GET","POST"])
+# def sign_up():
+#     if request.method == 'POST':
+#         username = request.form['Username']
+#         email = request.form['email']
+#         password = request.form['password']
+#         return '<p>User account created and logged in</p>'#render landing page
+#     return render_template('SignUp.html')
 
 
 
