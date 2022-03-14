@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 <!-- Custom Theme files -->
-<link href="Styles/style.css" rel="stylesheet" type="text/css" media="all" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 <!-- //Custom Theme files -->
 <!-- web font -->
 <link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
@@ -33,11 +33,11 @@
 					<input type="submit" name="submit" value="SIGNUP">
 				</form>
 				<p>Already have an Account?<a href="{{url_for('login_page')}}"> Login Now!</a></p>
-				{% if var is not none %}
+				<!-- {% if var is not none %}
 					{{var}}
 				{% else %}
-					NONE 
-				{% endif %}
+					NONE
+				{% endif %} -->
 			</div>
 		</div>
 	</div>
