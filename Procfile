@@ -1,1 +1,1 @@
-web: gunicorn --chdir ./AgriHelp app:app
+web: gunicorn --chdir AgriHelp app:app
