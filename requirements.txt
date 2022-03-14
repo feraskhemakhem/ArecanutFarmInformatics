@@ -4,4 +4,4 @@ ordereddict==1.1
 python-dotenv==0.19.2
 tornado==6.1
 Flask==1.1.1
-
+gunicorn==19.0.0
