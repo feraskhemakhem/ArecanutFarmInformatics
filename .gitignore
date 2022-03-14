@@ -2,6 +2,6 @@
 .env
 
 # pycache
-__pycache__/*
+AgriHelp/__pycache__/*
 AgriHelp/__pycache__/app.cpython-37.pyc
 AgriHelp/__pycache__/rds_db.cpython-37.pyc
