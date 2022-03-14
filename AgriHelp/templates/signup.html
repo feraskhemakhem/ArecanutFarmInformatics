@@ -18,11 +18,11 @@
 		<h1>Create Account</h1>
 		<div class="main-agileinfo">
 			<div class="agileits-top">
-				<form action="{{url_for('sign_up')}}" method="post">
+				<form action="{{url_for('signup_page')}}" method="post">
 					<input class="text" type="text" id="Username" name="Username" placeholder="Username" required="">
 					<input class="text email" type="email" id="email" name="email" placeholder="Email" required="">
 					<input class="text" type="password" id="password" name="password" placeholder="Password" required="">
-					<input class="text w3lpass" type="password" name="password" placeholder="Confirm Password" required="">
+					<input class="text w3lpass" type="password" id="password2" name="password2" placeholder="Confirm Password" required="">
 					<div class="wthree-text">
 						<label class="anim">
 							<input type="checkbox" class="checkbox" required="">
@@ -33,23 +33,13 @@
 					<input type="submit" name="submit" value="SIGNUP">
 				</form>
 				<p>Already have an Account?<a href="{{url_for('login_page')}}"> Login Now!</a></p>
-				<h4>User ID is: </h4>
-				{{var}}
+				{% if var is not none %}
+					{{var}}
+				{% else %}
+					NONE 
+				{% endif %}
 			</div>
 		</div>
-
-		<ul class="colorlib-bubbles">
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-		</ul>
 	</div>
 	<!-- //main -->
 </body>

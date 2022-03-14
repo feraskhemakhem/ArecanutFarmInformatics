@@ -24,24 +24,14 @@
 					<input type="submit" value="LOGIN">
 				</form>
 				<p>Forgot Password?<a href="#"> Reset It!</a></p>
-				<p>Don't have an Account?<a href="{{url_for('sign_up')}}"> Sign Up Now!</a></p>
+				<p>Don't have an Account?<a href="{{url_for('signup_page')}}"> Sign Up Now!</a></p>
 			</div>
-			<h4>User ID is: </h4>
-			{{var}}
+			{% if var is not none %}
+				{{var}}
+			{% else %}
+				NONE 
+			{% endif %}
 		</div>
-
-		<ul class="colorlib-bubbles">
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-		</ul> 
 	</div>
 	<!-- //main -->
 </body>

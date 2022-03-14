@@ -31,21 +31,21 @@ conn = pymysql.connect(
 def insert_new_user(username, email, password, password_verify):
     # if passwords do not match, return false
     if password != password_verify:
-        return -1
+        raise Exception('Passwords do not match')
     # check if username already exists or insert new user account
     with conn.cursor() as curr:
         # check if username already exists
         curr.execute("SELECT * FROM Users WHERE username = %s", (username))
         user_details = curr.fetchone()
-        if not user_details: # if username already in use, return false
-            return -2
+        if user_details: # if username already in use, return -2
+            raise Exception('Username already in use')
         # otherwise, add new user
         curr.execute("INSERT INTO Users (username, email, pswd) VALUES (%s, %s, %s)",  (username, email, password))
         conn.commit()
         # now get user ID to return
         curr.execute("SELECT user_id FROM Users WHERE username = %s", (username))
         new_user = curr.fetchone()
-        return new_user['user_id']
+        return int(new_user[0])
     # if connection failed return false
     # return False
 
@@ -57,9 +57,10 @@ def get_user(username, password):
         user_details = curr.fetchone()
         # details is now a map of schema names to values
         # check if row exists or password doesn't match what's in mySQL
-        if not user_details or user_details['pswd'] != password:
-            return -1
-        # if password matches, return user id
+        print(user_details)
+        if not user_details:
+            raise Exception('Username does not exist')
+        elif user_details[1] != password:
+            raise Exception('Incorrect password')
         else:
-            return user_details['user_id']
-    # return -1 # if connection fails, return -1 as safeguard
+            return user_details[0]
