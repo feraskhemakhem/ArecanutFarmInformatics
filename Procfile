@@ -1,1 +1,1 @@
-web: gunicorn --AgriHelp/app.py app app.wsgi
+web: gunicorn AgriHelp/app:app --log-file=-
