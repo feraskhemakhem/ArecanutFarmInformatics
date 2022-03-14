@@ -1,1 +1,1 @@
-web: gunicorn AgriHelp/app:app --log-file=-
+web: gunicorn AgriHelp.app:app --log-file=-
