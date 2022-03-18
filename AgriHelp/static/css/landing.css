@@ -1,0 +1,39 @@
+html, body {
+    height: 100%;
+    background-color:greenyellow;
+}
+
+#gradient{
+    text-align: center;
+    color:antiquewhite;
+   background-color: #51713a;
+   background-image: linear-gradient(314deg, #51713a 0%, #000e21 74%);
+
+}
+#gradient2{
+     text-align: center;
+    color:antiquewhite;
+   background-color: #51713a;
+   background-image: linear-gradient(314deg, #51713a 0%, #000e21 74%);
+}
+.container{
+    height: 100%;
+}
+
+P.buttons {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.btn { padding-left:25px;
+        padding-right:25px;
+    padding-top: 10px;
+    padding-bottom:10px;
+    text-align: center;
+    !important; }
+
+.margin-left{
+    margin-left: 50px !important;
+}
