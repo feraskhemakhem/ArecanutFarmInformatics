@@ -19,7 +19,7 @@ def login_page():
         except Exception as e:
             return render_template('login.html', var=e)
         # if valid user_id, reroute to landing page of user
-        return render_template('base.html')
+        return render_template('Landing.html')
 
     return render_template('login.html')
 
