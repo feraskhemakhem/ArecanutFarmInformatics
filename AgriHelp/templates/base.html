@@ -34,25 +34,13 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
-        <li><a style="color:white;" href="{{url_for('signup_page')}}"><span class="active"></span>Create an account</a></li>
+        <li><a style="color:white;" href="{{url_for('sign_up')}}"><span class="active"></span>Create an account</a></li>
         <li><a style="color:white;" href="{{url_for('login_page')}}"><span class="glyphicon glyphicon-log-in"></span> Sign in</a></li>
       </ul>
     </div>
   </div>
 </nav>
-<br><br>
-<br><br>
-  <div class="container">
-  <div class="well">
-  <br><br>
-      <h2><center>Welcome to Arecanut Farm Informatics</center></h2>
-      <blockquote>
-              <p style="color:black;font-size:20px;text-align:center;"><i>
-              A comprehensive tool to monitor and maintain Agricultural processes</i></h4>
-      </blockquote>
-      <br>
-  </div>
-  </div>
+ {%block content%} {%endblock%}
 
 </body>
 </html>

@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home_page():
-    return render_template('base.html')
+    return render_template('home_page.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
@@ -36,7 +36,7 @@ def signup_page():
             user_id = db.insert_new_user(username, email, password, confirm_password)
         except Exception as e:
             return render_template('signup.html', var=e)
-        return render_template('base.html')
+        return render_template('home_page.html')
     return render_template('signup.html')
 
 if '__main__' == __name__:
