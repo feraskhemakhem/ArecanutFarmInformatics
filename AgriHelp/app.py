@@ -16,6 +16,7 @@ def login_page():
         password = request.form['password']
         try:
             user_id = db.get_user(username, password)
+            return render_template('Landing.html')
         except Exception as e:
             return render_template('login.html', var=e)
         # if valid user_id, reroute to landing page of user
@@ -42,9 +43,10 @@ def signup_page():
 @app.route('/tankinput', methods=['GET', 'POST'])
 def tank_input():
     # if we get a form request to add tank details
+
     return render_template('tankinput.html')
 
-@app.route('/plotinput', methods=["POST"])
+@app.route('/plotinput', methods=['GET','POST'])
 def plot_input():
     if request.method == 'POST':
         plot_names = request.form.getlist('plot_name')
@@ -53,8 +55,9 @@ def plot_input():
         plot_size = request.form.getlist('plot_size')
         #store these in db
         return render_template("irrigation_input.html", plot_names=plot_names)
+    return render_template('plot_input.html')
 
-@app.route('/irrigationschedule', methods=["POST"])
+@app.route('/irrigationschedule', methods=['GET','POST'])
 def irrigation_schedule_input():
     if request.method == "POST":
         start_date = request.form.getlist('start_date')
@@ -63,6 +66,17 @@ def irrigation_schedule_input():
         frequency = request.form.getlist('frequency')
         #save these in db
         return render_template('Landing.html')#landing page
+    return render_template('irrigation_input.html')
+# @app.route('/LandingPage',method=["POST"])
+# def LandingPage():
+#     if request.method == "POST":
+#         if request.form.get('Rainfall') == 'Rainfall_data':
+#             return render_template('tankinput.html')
+#         elif request.form.get('tankinput') == 'tankinput_data':
+#             return render_template('tankinput.html')
+#         else:
+#             return render_template('home_page.html')
+
 
 if '__main__' == __name__:
     app.run()
