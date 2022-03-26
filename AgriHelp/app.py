@@ -39,5 +39,10 @@ def signup_page():
         return render_template('home_page.html')
     return render_template('signup.html')
 
+@app.route('/tankinput', methods=['GET', 'POST'])
+def tank_input():
+    # if we get a form request to add tank details
+    return render_template('tankinput.html')
+
 if '__main__' == __name__:
     app.run()
