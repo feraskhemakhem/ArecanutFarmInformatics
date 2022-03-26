@@ -44,5 +44,25 @@ def tank_input():
     # if we get a form request to add tank details
     return render_template('tankinput.html')
 
+@app.route('/plotinput', methods=["POST"])
+def plot_input():
+    if request.method == 'POST':
+        plot_names = request.form.getlist('plot_name')
+        if plot_names == []:
+            return render_template('Landing.html')# return landing page
+        plot_size = request.form.getlist('plot_size')
+        #store these in db
+        return render_template("irrigation_input.html", plot_names=plot_names)
+
+@app.route('/irrigationschedule', methods=["POST"])
+def irrigation_schedule_input():
+    if request.method == "POST":
+        start_date = request.form.getlist('start_date')
+        start_time = request.form.getlist('start_time')
+        end_time = request.form.getlist('end_time')
+        frequency = request.form.getlist('frequency')
+        #save these in db
+        return render_template('Landing.html')#landing page
+
 if '__main__' == __name__:
     app.run()

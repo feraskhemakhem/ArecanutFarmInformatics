@@ -1,0 +1,117 @@
+{%extends 'base.html'%}
+{%block content%}
+  
+<head>
+  
+  <script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+  </script>
+  <script src=
+"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js">
+  </script>
+  <script src=
+"https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+  </script>
+  
+  <script>
+    $(document).ready(function () {
+  
+      // Denotes total number of rows
+      var rowIdx = 0;
+  
+      // jQuery button click event to add a row
+      $('#addBtn').on('click', function () {
+  
+        // Adding a row inside the tbody.
+        $('#tbody').append(`<tr id="R${++rowIdx}">
+             <td class="row-index text-center">
+             <p>${rowIdx}</p>
+             <td class="text-center">
+             <input type="text" name="plot_name" required="" />
+             </td>
+              <td class="text-center">
+              <input type="number" name="plot_size" required="" />
+              </td>
+              <td class="text-center">
+                <button class="btn btn-danger remove"
+                  type="button">Remove</button>
+                </td>
+              </tr>`);
+      });
+  
+      // jQuery button click event to remove a row.
+      $('#tbody').on('click', '.remove', function () {
+  
+        // Getting all the rows next to the row
+        // containing the clicked button
+        var child = $(this).closest('tr').nextAll();
+  
+        // Iterating across all the rows 
+        // obtained to change the index
+        child.each(function () {
+  
+          // Getting <tr> id.
+          var id = $(this).attr('id');
+  
+          // Getting the <p> inside the .row-index class.
+          var idx = $(this).children('.row-index').children('p');
+  
+          // Gets the row number from <tr> id.
+          var dig = parseInt(id.substring(1));
+  
+          // Modifying row index.
+          idx.html(` ${dig - 1}`);
+  
+          // Modifying row id.
+          $(this).attr('id', `R${dig - 1}`);
+        });
+  
+        // Removing the current row.
+        $(this).closest('tr').remove();
+  
+        // Decreasing total number of rows by 1.
+        rowIdx--;
+      });
+    });
+  </script>
+</head>
+
+<br><br>
+<br><br>
+  <div class="container pt-4">
+  <div class="well">
+    <form id="myform" action="{{url_for('plot_input')}}" method="POST">   
+     <body>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+          <center><h3>Agricultural Plot Information</h3></center>
+            <thead>
+              <tr>
+                <th class="text-center"> </th>
+                <th class="text-center">Plot Name/ID</th>
+                <th class="text-center">Plot Size(in hectare)</th>
+                <th class="text-center"> </th>
+                
+              </tr>
+            </thead>
+            <tbody id="tbody">
+      
+            </tbody>
+          </table>
+        </div>
+        <button class="btn btn-md btn-primary" 
+          id="addBtn" type="button">
+            Add Plot
+        </button>
+      <center><input class="btn btn-md btn-primary" type="submit" value="Save and Proceed"></center>
+    </body>
+  
+    
+
+ </form> 
+     
+</div>
+</div>
+
+
+{%endblock%}
