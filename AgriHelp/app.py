@@ -16,11 +16,11 @@ def login_page():
         password = request.form['password']
         try:
             user_id = db.get_user(username, password)
-            return render_template('Landing.html')
+            return render_template('Landing.html',variable=username)
         except Exception as e:
             return render_template('login.html', var=e)
         # if valid user_id, reroute to landing page of user
-        return render_template('Landing.html')
+        return render_template('Landing.html',variable=username)
 
     return render_template('login.html')
 

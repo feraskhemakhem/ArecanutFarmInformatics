@@ -1,16 +1,48 @@
 {%extends 'base.html'%}
 {%block content%}
-  <head>
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
-    <title>Landing Page</title>
-  </head>
   <body>
  <br><br>
  <br><br>
-  <div class="container">
+ <style>
+.button {
+  color: white;
+  cursor: pointer;
+}
+.table-borderless th {
+  border: none !important;
+  border-right: solid 1px #ccc !important;
+}
+</style>
+ <div class="container well">
+   <table class="table table-borderless">
+     <thead>
+       <tr>
+         <th class="text-center"><button name="Rainfall" type="button" value="Rainfall_data" class="btn btn-primary" id="gradient2">Rainfall Data</button></th>
+         <th class="text-center"><button name="tankinput" type="button" value="tankinput_data" class="btn btn-primary" id="gradient2"><a style="color:white" href="{{url_for('tank_input')}}">Water Tank Input</a></button></th>
+         <th class="text-center"><button name="WaterReport" type="button" value="WaterReport_data" class="btn btn-primary" id="gradient2">Available Water Report</button></th>
+       </tr>
+       <tr>
+         <th class="text-center"></th>
+          <th class="text-center"><button name="Plot" type="button" value="Plot_data" class="btn btn-primary" id="gradient2" style="align-items:center"><a style="color:white" href="{{url_for('plot_input')}}">Plot Details</a></button></th>
+          <th></th>
+         </tr>
+         <tr>
+              <th class="text-center"><button name="Irrigation" type="button" value="Irrigation_data" class="btn btn-primary" id="gradient"><a style="color:white" href="{{url_for('irrigation_schedule_input')}}">Irrigation Scheduling</a></button></th>
+                 <th class="text-center"><button name="Fertigation" type="button" value="Fertigation_data" class="btn btn-primary" id="gradient2">Fertigation Scheduling</button></th>
+                    <th class="text-center"><button name="Harvest" type="button" value="Harvest_data" class="btn btn-primary" id="gradient2">Crop Harvest Cycle</button></th>
+           </tr>
+           <tr>
+             <th class="text-center"></th>
+             <th class="text-center"> <button name="Statistics" type="button" value="Statistics_data" class="btn btn-primary" id="gradient2" style="align-items:center">Statistics</button></th>
+             <th class="text-center"></th>
+           </tr>
+     </thead>
+   </table>
+   </div>
+  <!-- <div class="container well">
       <div class="row" style="height: 25%; padding-top:">
          <p class="buttons">
-          <button name="Rainfall" type="button" value="Rainfall_data" class="btn my-1 margin-left" id="gradient2">Rainfall Data</button>
+          <button name="Rainfall" type="button" value="Rainfall_data" class="btn btn-primary" id="gradient2">Rainfall Data</button>
           <button name="tankinput" type="button" value="tankinput_data" class="btn my-1 margin-left" id="gradient2"><a href="{{url_for('tank_input')}}">Water Tank Input</a></button>
           <button name="WaterReport" type="button" value="WaterReport_data" class="btn my-1 margin-left" id="gradient2">Available Water Report</button>
           </p>
@@ -32,6 +64,6 @@
        <button name="Statistics" type="button" value="Statistics_data" class="btn btn-default" id="gradient2" style="align-items:center">Statistics</button>
      </div>
     </div>
-      </div>
+      </div> -->
   </body>
 {%endblock%}
