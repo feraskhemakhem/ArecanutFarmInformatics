@@ -67,6 +67,16 @@ def irrigation_schedule_input():
         #save these in db
         return render_template('Landing.html')#landing page
     return render_template('irrigation_input.html')
+
+@app.route('/rainfallinput', methods=['GET','POST'])
+def rainfall_input():
+    if request.method == "POST":
+        _date = request.form.getlist('date')
+        _measurement = request.form.getlist('rainfall')
+        #save these in db
+        return render_template('Landing.html')#landing page
+    return render_template('rainfall_input.html')
+
 # @app.route('/LandingPage',method=["POST"])
 # def LandingPage():
 #     if request.method == "POST":
