@@ -16,11 +16,12 @@ def login_page():
         password = request.form['password']
         try:
             user_id = db.get_user(username, password)
+            print("user logged in succesesfully")
             # if valid user_id, reroute to landing page of user
-            return render_template('landing.html',variable=username)
+            # return render_template('landing.html',variable=username)
+            return render_template('tankinput.html',variable=username)
         except Exception as e:
             return render_template('login.html', var=e)
-
     return render_template('login.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -36,7 +37,7 @@ def signup_page():
             user_id = db.insert_new_user(username, email, password, confirm_password)
         except Exception as e:
             return render_template('signup.html', var=e)
-        return render_template('home_page.html')
+        return render_template('landing.html', variable=username)
     return render_template('signup.html')
 
 @app.route('/tankinput', methods=['GET', 'POST'])
