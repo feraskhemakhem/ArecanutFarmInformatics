@@ -6,7 +6,7 @@ Created on Sun Mar 13 21:08:44 2022
 """
 
 import unittest
-import AFI_UI
+import app as AFI_UI
 
 
 class Testapp(unittest.TestCase):
