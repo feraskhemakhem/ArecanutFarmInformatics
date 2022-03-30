@@ -1,0 +1,47 @@
+{%extends 'base.html'%}
+{%block content%}
+<br><br>
+<br><br>
+  <div class="container pt-4">
+  <div class="well">
+    <form action="{{url_for('irrigation_schedule_input')}}" method="post">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+          <center><h3>Set Irrigation Schedule</h3></center>
+            <thead>
+              <tr>
+                <th class="text-center">Plot Name/ID</th>
+                <th class="text-center">Start Date</th>
+                <th class="text-center">Start Time</th>
+                <th class="text-center">End Time</th>
+                <th class="text-center">Frequency in Number of Days</th>  
+              </tr>
+            </thead>
+            <tbody id="tbody">
+                {% for col in plot_names%}
+                <tr>
+                <td class="text-center">{{col}}</td>
+                <td class="text-center">
+                <input type="date" id="start_date" name="start_date" required="">
+                </td>
+                <td class="text-center">
+                <input type="time" id="start_time" name="start_time" required="">
+                </td>
+                <td class="text-center">
+                <input type="time" id="end_time" name="end_time" required="">
+                </td>
+                <td class="text-center">
+                <input type="number" id="frequency" name="frequency" required="">
+                </td>
+                </tr>
+                {%endfor%}
+            </tbody>
+          </table>
+        </div>
+        <center>
+        <input class="btn btn-md btn-primary" type="submit" value="Save and Proceed" />
+        </center> 
+    </form> 
+</div>
+</div>
+{%endblock%}
