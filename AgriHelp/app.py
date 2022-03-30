@@ -16,11 +16,10 @@ def login_page():
         password = request.form['password']
         try:
             user_id = db.get_user(username, password)
-            return render_template('Landing.html',variable=username)
+            # if valid user_id, reroute to landing page of user
+            return render_template('landing.html',variable=username)
         except Exception as e:
             return render_template('login.html', var=e)
-        # if valid user_id, reroute to landing page of user
-        return render_template('Landing.html',variable=username)
 
     return render_template('login.html')
 
@@ -43,18 +42,19 @@ def signup_page():
 @app.route('/tankinput', methods=['GET', 'POST'])
 def tank_input():
     # if we get a form request to add tank details
-
+    
     return render_template('tankinput.html')
 
 @app.route('/plotinput', methods=['GET','POST'])
 def plot_input():
     if request.method == 'POST':
-        plot_names = request.form.getlist('plot_name')
-        if plot_names == []:
-            return render_template('Landing.html')# return landing page
-        plot_size = request.form.getlist('plot_size')
+        _plot_names = request.form.getlist('plot_name')
+        if _plot_names == []:
+            return render_template('landing.html')# return landing page
+        _plot_sizes = request.form.getlist('plot_size')
         #store these in db
-        return render_template("irrigation_input.html", plot_names=plot_names)
+        db.add_plot('hi', _plot_names, _plot_sizes)
+        return render_template("irrigation_input.html", plot_names=_plot_names)
     return render_template('plot_input.html')
 
 @app.route('/irrigationschedule', methods=['GET','POST'])
@@ -64,8 +64,10 @@ def irrigation_schedule_input():
         start_time = request.form.getlist('start_time')
         end_time = request.form.getlist('end_time')
         frequency = request.form.getlist('frequency')
+        plot_names = [x for x in range(1, len(start_date)+1)]
         #save these in db
-        return render_template('Landing.html')#landing page
+        db.add_irrigation_schedule('hi', plot_names, start_date, start_time, end_time, frequency)
+        return render_template('landing.html')#landing page
     return render_template('irrigation_input.html')
 
 @app.route('/rainfallinput', methods=['GET','POST'])
@@ -74,7 +76,8 @@ def rainfall_input():
         _date = request.form.getlist('date')
         _measurement = request.form.getlist('rainfall')
         #save these in db
-        return render_template('Landing.html')#landing page
+        db.add_rainfall_day('hi', _date, _measurement)
+        return render_template('landing.html')#landing page
     return render_template('rainfall_input.html')
 
 # @app.route('/LandingPage',method=["POST"])

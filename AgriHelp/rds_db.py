@@ -10,9 +10,9 @@ config = dotenv_values('.env')
 
 # connect to aws
 conn = pymysql.connect(
-        host = config['HOST'],
-        port = int(config['PORT']),
-        user = config['USER'],    
+        host = config['HOST_NAME'],
+        port = int(config['PORT_NO']),
+        user = config['USER_NAME'],    
         password = config['PASSWORD'],
         db = config['DB'],
         )
@@ -24,10 +24,13 @@ conn = pymysql.connect(
 # """
 # cursor.execute(create_table)
 
+"""
+Iteration 1: User account functions
+"""
+
 # insert new user (no ecryption)
-# -1: passwords do not match
-# -2: username already exists
-#  0: works
+# exceptions: passwords do not match, username already exists
+# return: user id if successful
 def insert_new_user(username, email, password, password_verify):
     # if passwords do not match, return false
     if password != password_verify:
@@ -50,6 +53,8 @@ def insert_new_user(username, email, password, password_verify):
     # return False
 
 # verify login info given username/password
+# exceptions: user does not exist, password incorrect
+# return: user id if valid
 def get_user(username, password):
     with conn.cursor() as curr:
         # run query and get results
@@ -57,10 +62,85 @@ def get_user(username, password):
         user_details = curr.fetchone()
         # details is now a map of schema names to values
         # check if row exists or password doesn't match what's in mySQL
-        print(user_details)
         if not user_details:
             raise Exception('Username does not exist')
         elif user_details[1] != password:
             raise Exception('Incorrect password')
         else:
             return user_details[0]
+
+"""
+Iteration 2: Rainfall, and Plot Inputs (Including Irrigation Schedule)
+"""
+
+# add new rainfall day
+# parameters are string, list, list
+def add_rainfall_day(username, _date, _rainfall_quant):
+    date = _date[0]
+    print(date)
+    rainfall_quant = _rainfall_quant[0]
+    print(rainfall_quant)
+    with conn.cursor() as curr:
+        # if already exists and not the same val, replace it
+        # if not in the table, add new entry
+        curr.execute("SELECT rain_quant FROM Rainfall WHERE username = %s AND rain_date = %s", (username, date))
+        rain_details = curr.fetchone()
+        if rain_details and rain_details[0] != rainfall_quant: # if already exists and not the same value
+            print(rain_details)
+            print(type(rain_details))
+            curr.execute("UPDATE Rainfall SET rain_quant = %s WHERE username = %s AND rain_date = %s", (rainfall_quant, username, date))
+        elif not rain_details: # if does not exist, add new
+            curr.execute("INSERT INTO Rainfall (username, rain_date, rain_quant) VALUES (%s, %s, %s)", (username, date, rainfall_quant))
+        # else, correct value already stored and do nothing!
+        else:
+            return
+        # commit changes if not doing nothing
+        conn.commit()
+
+# add new plot input
+# parameters are string, list, list
+def add_plot(username, _plot_name, _plot_size):
+    with conn.cursor() as curr:
+        # if already exists and not the same val, replace it
+        # if not in the table, add new entry
+        for i in range(len(_plot_name)):
+            plot_name = _plot_name[i]
+            plot_size = _plot_size[i]
+            curr.execute("SELECT plot_size FROM Plots WHERE username = %s AND plot_name = %s", (username, plot_name))
+            plot_details = curr.fetchone()
+            if plot_details and plot_details[0] != plot_size: # if already exists and not the same value
+                print(plot_details)
+                print(type(plot_details))
+                curr.execute("UPDATE Plots SET plot_size = %s WHERE username = %s AND plot_name = %s", (plot_size, username, plot_name))
+            elif not plot_details: # if does not exist, add new
+                print("elif here")
+                curr.execute("INSERT INTO Plots (username, plot_name, plot_size) VALUES (%s, %s, %s)", (username, plot_name, plot_size))
+            # else, correct value already stored and do nothing!
+            else:
+                return
+            # commit changes if not doing nothing
+            conn.commit()
+
+# add new plot input
+# parameters are string, list, list
+def add_irrigation_schedule(username, _plot_name, _start_date, _start_time, _end_time, _freq):
+    print(_plot_name)
+    with conn.cursor() as curr:
+        # if already exists and not the same val, replace it
+        # if not in the table, add new entry
+        for i in range(len(_plot_name)):
+            start_date = _start_date[i]
+            plot_name = _plot_name[i]
+            start_time = _start_time[i]
+            end_time = _end_time[i]
+            freq = _freq[i]
+            # update db
+            curr.execute("UPDATE Plots SET start_date = %s, start_time = %s, end_time = %s, frequency = %s WHERE username = %s AND plot_name = %s", (start_date, start_time, end_time, freq, username, plot_name))
+        conn.commit()
+            
+# get DB
+def get_db():
+    with conn.cursor() as curr:
+        curr.execute("SELECT * FROM Rainfall")
+        idk = curr.fetchall()
+        print(idk)
