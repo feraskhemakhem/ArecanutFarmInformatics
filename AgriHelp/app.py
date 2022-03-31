@@ -43,7 +43,11 @@ def signup_page():
 @app.route('/tankinput', methods=['GET', 'POST'])
 def tank_input():
     # if we get a form request to add tank details
-    
+    if request.method == 'POST':
+        _tank_name = request.form.get('tank_name')
+        #need to see how to pick and send values to get stored (based on table struct)
+        #_measurement = request.form.getlist('')
+        
     return render_template('tankinput.html')
 
 @app.route('/plotinput', methods=['GET','POST'])
