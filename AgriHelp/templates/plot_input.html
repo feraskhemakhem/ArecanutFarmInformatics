@@ -17,7 +17,7 @@
     $(document).ready(function () {
   
       // Denotes total number of rows
-      var rowIdx = 0;
+      var rowIdx = {{rownum}};
   
       // jQuery button click event to add a row
       $('#addBtn').on('click', function () {
@@ -95,7 +95,21 @@
               </tr>
             </thead>
             <tbody id="tbody">
-      
+            {% for n, name, size in plot_info%}
+            <tr id="R${n+1}">
+              <td class="row-index text-center">{{n}}</td>
+              <td class="text-center">
+              <input type="text" name="plot_name" required="" value={{name}}>
+              </td>
+               <td class="text-center">
+               <input type="number" name="plot_size" required="" value={{size}}>
+               </td>
+              <td class="text-center">
+                <button class="btn btn-danger remove"
+                  type="button">Remove</button>
+                </td>
+            </tr>
+            {%endfor%} 
             </tbody>
           </table>
         </div>
@@ -112,6 +126,11 @@
      
 </div>
 </div>
+
+
+    
+
+
 
 
 {%endblock%}

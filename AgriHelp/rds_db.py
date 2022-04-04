@@ -137,7 +137,22 @@ def add_irrigation_schedule(username, _plot_name, _start_date, _start_time, _end
             # update db
             curr.execute("UPDATE Plots SET start_date = %s, start_time = %s, end_time = %s, frequency = %s WHERE username = %s AND plot_name = %s", (start_date, start_time, end_time, freq, username, plot_name))
         conn.commit()
-            
+     
+#get plot details
+def get_plot(username):
+    with conn.cursor() as curr:
+        curr.execute("SELECT plot_name, plot_size FROM Plots WHERE username = %s", (username))
+        plot_details = curr.fetchall()
+        return plot_details
+    
+#get irrigation schedule details
+def get_irrigation_schedule(username):
+    with conn.cursor() as curr:
+        curr.execute("SELECT start_date, start_time, end_time, frequency FROM Plots WHERE username = %s", (username))
+        irrigation_details = curr.fetchall()
+        return irrigation_details
+        
+    
 # get DB
 def get_db():
     with conn.cursor() as curr:
