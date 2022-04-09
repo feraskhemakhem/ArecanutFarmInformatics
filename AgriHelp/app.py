@@ -59,15 +59,20 @@ def signup_page():
         return render_template('landing.html', variable=username)
     return render_template('signup.html')
 
-@app.route('/tankinput', methods=['GET', 'POST'])
+@app.route('/tank_input', methods=['GET', 'POST'])
 def tank_input():
     # if we get a form request to add tank details
     if request.method == 'POST':
         _tank_name = request.form.get('tank_name')
-        #need to see how to pick and send values to get stored (based on table struct)
+        # for testing
+        # _tank_shape = request.form.get('rectangle')
+        # print(_tank_shape)
+        # print('howdy')
+        # need to see how to pick and send values to get stored (based on table struct)
         #_measurement = request.form.getlist('')
+        return render_template('landing.html')
         
-    return render_template('tankinput.html')
+    return render_template('tank_input.html')
 
 @app.route('/plotinput', methods=['GET','POST'])
 def plot_input():
@@ -128,9 +133,9 @@ def rainfall_input():
 # def LandingPage():
 #     if request.method == "POST":
 #         if request.form.get('Rainfall') == 'Rainfall_data':
-#             return render_template('tankinput.html')
-#         elif request.form.get('tankinput') == 'tankinput_data':
-#             return render_template('tankinput.html')
+#             return render_template('tank_input.html')
+#         elif request.form.get('tank_input') == 'tank_input_data':
+#             return render_template('tank_input.html')
 #         else:
 #             return render_template('home_page.html')
 

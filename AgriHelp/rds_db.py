@@ -138,24 +138,50 @@ def add_irrigation_schedule(username, _plot_name, _start_date, _start_time, _end
             curr.execute("UPDATE Plots SET start_date = %s, start_time = %s, end_time = %s, frequency = %s WHERE username = %s AND plot_name = %s", (start_date, start_time, end_time, freq, username, plot_name))
         conn.commit()
      
-#get plot details
+# get plot details
 def get_plot(username):
     with conn.cursor() as curr:
         curr.execute("SELECT plot_name, plot_size FROM Plots WHERE username = %s", (username))
         plot_details = curr.fetchall()
         return plot_details
     
-#get irrigation schedule details
+# get irrigation schedule details
 def get_irrigation_schedule(username):
     with conn.cursor() as curr:
         curr.execute("SELECT start_date, start_time, end_time, frequency FROM Plots WHERE username = %s", (username))
         irrigation_details = curr.fetchall()
         return irrigation_details
-        
-    
-# get DB
-def get_db():
+
+
+"""
+Iteration 3: Tank Input
+"""
+
+# add new tank to database
+# all inputs are strings except dimensions, which is an array of strings
+def add_tank_input(username, tank_name, tank_shape, dimensions):
     with conn.cursor() as curr:
-        curr.execute("SELECT * FROM Rainfall")
-        idk = curr.fetchall()
-        print(idk)
+        # the shape will determine the number of dimensions to populate
+        # automatically populate the keyword string based on shape
+        if (tank_shape == 'Rectangle'):
+            curr.execute("INSERT INTO Tanks (username, tank_name, tank_shape, dimension_1, dimension_2, dimension_3) VALUES %s, %s, %s, %s, %s, %s", (username, tank_name, tank_shape, dimensions[0], dimensions[1], dimensions[2]))
+        elif (tank_shape == 'Trapezoid'):
+            curr.execute("INSERT INTO Tanks (username, tank_name, tank_shape, dimension_1, dimension_2, dimension_3, dimension_4, dimension_5) VALUES %s, %s, %s, %s, %s, %s, %s, %s", (username, tank_name, tank_shape, dimensions[0], dimensions[1], dimensions[2], dimensions[3], dimensions[4]))
+        elif (tank_shape == 'Circle'):
+            curr.execute("INSERT INTO Tanks (username, tank_name, tank_shape, dimension_1, dimension_2) VALUES %s, %s, %s, %s, %s", (username, tank_name, tank_shape, dimensions[0], dimensions[1]))
+        curr.commit()
+
+
+
+
+
+"""
+Helper Functions
+"""
+        
+# get DB
+def get_db(table_name):
+    with conn.cursor() as curr:
+        curr.execute("SELECT * FROM %s", (table_name))
+        table_contents = curr.fetchall()
+        print(table_contents)
