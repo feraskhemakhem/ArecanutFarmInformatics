@@ -12,7 +12,7 @@ config = dotenv_values('.env')
 conn = pymysql.connect(
         host = config['HOST_NAME'],
         port = int(config['PORT_NO']),
-        user = config['USER_NAME'],    
+        user = config['USER_NAME'],
         password = config['PASSWORD'],
         db = config['DB'],
         )
@@ -68,6 +68,15 @@ def get_user(username, password):
             raise Exception('Incorrect password')
         else:
             return user_details[0]
+
+def get_user_list():
+    with conn.cursor() as curr:
+        curr.execute("SELECT * FROM Users")
+        user_list = curr.fetchall()
+
+        return user_list
+
+
 
 """
 Iteration 2: Rainfall, and Plot Inputs (Including Irrigation Schedule)
@@ -137,14 +146,14 @@ def add_irrigation_schedule(username, _plot_name, _start_date, _start_time, _end
             # update db
             curr.execute("UPDATE Plots SET start_date = %s, start_time = %s, end_time = %s, frequency = %s WHERE username = %s AND plot_name = %s", (start_date, start_time, end_time, freq, username, plot_name))
         conn.commit()
-     
+
 # get plot details
 def get_plot(username):
     with conn.cursor() as curr:
         curr.execute("SELECT plot_name, plot_size FROM Plots WHERE username = %s", (username))
         plot_details = curr.fetchall()
         return plot_details
-    
+
 # get irrigation schedule details
 def get_irrigation_schedule(username):
     with conn.cursor() as curr:
@@ -172,13 +181,10 @@ def add_tank_input(username, tank_name, tank_shape, dimensions):
         curr.commit()
 
 
-
-
-
 """
 Helper Functions
 """
-        
+
 # get DB
 def get_db(table_name):
     with conn.cursor() as curr:

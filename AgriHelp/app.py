@@ -2,6 +2,9 @@
 from flask import Flask, render_template, request, redirect, url_for
 import rds_db as db
 
+from datetime import datetime
+from datetime import timedelta
+import email
 app = Flask(__name__)
 global username
 
@@ -18,8 +21,8 @@ def get_plot_info(username):
     _plot_names = [i[0] for i in _plot_info]
     _plot_sizes = [i[1] for i in _plot_info]
     return _plot_names, _plot_sizes
-    
-    
+
+
 
 @app.route('/')
 def home_page():
@@ -64,14 +67,9 @@ def tank_input():
     # if we get a form request to add tank details
     if request.method == 'POST':
         _tank_name = request.form.get('tank_name')
-        # for testing
-        # _tank_shape = request.form.get('rectangle')
-        # print(_tank_shape)
-        # print('howdy')
-        # need to see how to pick and send values to get stored (based on table struct)
-        #_measurement = request.form.getlist('')
+
         return render_template('landing.html')
-        
+
     return render_template('tank_input.html')
 
 @app.route('/plotinput', methods=['GET','POST'])
@@ -88,16 +86,16 @@ def plot_input():
         _plot_sizes = request.form.getlist('plot_size')
         #store these in db
         db.add_plot(username, _plot_names, _plot_sizes)
-        
+
         _start_date = _start_date + ['' for i in _plot_names]
         _start_time = _start_time + ['' for i in _plot_names]
         _end_time = _end_time + ['' for i in _plot_names]
         _frequency = _frequency + ['' for i in _plot_names]
-        
-        return render_template("irrigation_input.html", 
-                               info=zip(_plot_names,_start_date,_start_time, _end_time, _frequency), 
+
+        return render_template("irrigation_input.html",
+                               info=zip(_plot_names,_start_date,_start_time, _end_time, _frequency),
                                variable=username)
-    
+
     return render_template('plot_input.html', rownum=len(_plot_names),
                            plot_info=zip(n, _plot_names,_plot_sizes), variable=username)
 
@@ -106,16 +104,33 @@ def irrigation_schedule_input():
     global username
     _plot_names, _plot_sizes = get_plot_info(username)
     _start_date, _start_time, _end_time, _frequency = get_irrigation_info(username)
+
+    # _irrigation_time = datetime.datetime.strptime(_start_date,''%Y-%m-%d')
+    # _schedule = _irrigation_time + datetime.timedelta(days=frequency)
+
+
     if request.method == "POST":
         start_date = request.form.getlist('start_date')
         start_time = request.form.getlist('start_time')
         end_time = request.form.getlist('end_time')
         frequency = request.form.getlist('frequency')
+        #next_email
+
+        # _irrigation_start = datetime.datetime.strptime(_start_date,''%m-%d-%y')
+        # _schedule = _irrigation_start + datetime.timedelta(days=frequency) #add frequency to date
+        # next_email = _schedule
+
+
+
+
+
+
+
         #save these in db
         db.add_irrigation_schedule(username, _plot_names, start_date, start_time, end_time, frequency)
         return render_template('landing.html', variable=username)#landing page
-    return render_template("irrigation_input.html", 
-                               info=zip(_plot_names,_start_date,_start_time, _end_time, _frequency), 
+    return render_template("irrigation_input.html",
+                               info=zip(_plot_names,_start_date,_start_time, _end_time, _frequency),
                                variable=username)
 
 @app.route('/rainfallinput', methods=['GET','POST'])
@@ -129,15 +144,6 @@ def rainfall_input():
         return render_template('landing.html', variable=username)#landing page
     return render_template('rainfall_input.html', variable=username)
 
-# @app.route('/LandingPage',method=["POST"])
-# def LandingPage():
-#     if request.method == "POST":
-#         if request.form.get('Rainfall') == 'Rainfall_data':
-#             return render_template('tank_input.html')
-#         elif request.form.get('tank_input') == 'tank_input_data':
-#             return render_template('tank_input.html')
-#         else:
-#             return render_template('home_page.html')
 
 
 if '__main__' == __name__:
