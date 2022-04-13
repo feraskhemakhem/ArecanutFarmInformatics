@@ -12,26 +12,26 @@
               <tr>
                 <th class="text-center">Plot Name/ID</th>
                 <th class="text-center">Start Date</th>
-                <th class="text-center">Start Time</th>
-                <th class="text-center">End Time</th>
+                <th class="text-center">Start Time(HH:MM AM/PM)</th>
+                <th class="text-center">End Time(HH:MM AM/PM</th>
                 <th class="text-center">Frequency in Number of Days</th>  
               </tr>
             </thead>
             <tbody id="tbody">
-                {% for col in plot_names%}
+                {% for name, sdate, stime, etime, freq in info%}
                 <tr>
-                <td class="text-center">{{col}}</td>
+                <td class="text-center">{{name}}</td>
                 <td class="text-center">
-                <input type="date" id="start_date" name="start_date" required="">
+                <input type="date" id="start_date" name="start_date" required="" value={{sdate}}>
                 </td>
                 <td class="text-center">
-                <input type="time" id="start_time" name="start_time" required="">
+                <input type="time" id="start_time" name="start_time" required="" value={{stime}}>
                 </td>
                 <td class="text-center">
-                <input type="time" id="end_time" name="end_time" required="">
+                <input type="time" id="end_time" name="end_time" required="" value={{etime}}>
                 </td>
                 <td class="text-center">
-                <input type="number" id="frequency" name="frequency" required="">
+                <input type="number" id="frequency" name="frequency" required="" min="1" value={{freq}}>
                 </td>
                 </tr>
                 {%endfor%}
