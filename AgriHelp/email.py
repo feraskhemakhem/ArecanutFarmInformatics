@@ -20,8 +20,8 @@ def email():
     #_username, _email, _pswd = get_user_list()
     user_list = db.get_user_list()
     for user in user_list:
-        _username, _email, _pswd = user
-    print(user)
+        _userid, _username, _email, _pswd = user
+        print(user)
 
 
 #return next available date
