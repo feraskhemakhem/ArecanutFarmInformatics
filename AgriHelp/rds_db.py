@@ -3,18 +3,19 @@ Using pymysql to access the db on AWS RDS
 """
 
 import pymysql
-from dotenv import dotenv_values
+import os
+from dotenv import load_dotenv
 
 # load env variables
-config = dotenv_values('.env')
+load_dotenv()
 
 # connect to aws
 conn = pymysql.connect(
-        host = config['HOST_NAME'],
-        port = int(config['PORT_NO']),
-        user = config['USER_NAME'],
-        password = config['PASSWORD'],
-        db = config['DB'],
+        host = os.environ['HOST_NAME'],
+        port = int(os.environ['PORT_NO']),
+        user = os.environ['USER_NAME'],    
+        password = os.environ['PASSWORD'],
+        db = os.environ['DB'],
         )
 
 # create table if not already existing (no encryption)
