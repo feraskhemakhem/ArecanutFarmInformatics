@@ -144,7 +144,23 @@ def rainfall_input():
         return render_template('landing.html', variable=username)#landing page
     return render_template('rainfall_input.html', variable=username)
 
+    # siri's version
+    # if request.method == "POST":
+    #     _date = request.form.getlist('date')[0]
+    #     _measurement = request.form.getlist('rainfall')[0]
+    #     if not str(_date)<= str(datetime.today().date()):
+    #         raise Exception('wrong date')
+    #     try:
+    #         _measurement = float(_measurement)
+    #     except:
+    #         raise Exception('wrong data type - rainfall input')
 
+        
+    #     #save these in db
+    #     return render_template('Landing.html')#landing page
+
+
+    # return render_template('rainfall_input.html')
 
 if '__main__' == __name__:
     app.run()
