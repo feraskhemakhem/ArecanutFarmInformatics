@@ -1,29 +1,20 @@
 import pymysql
 import datetime 
 import smtplib
-
+from dotenv import load_dotenv
 from string import Template
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
-# load env variables
-config = dict(
-    HOST_NAME="arecanutfarminformatics.ceyu5qc2r3bs.us-east-1.rds.amazonaws.com",
-PORT_NO="3306",
-USER_NAME="admin",
-PASSWORD="0HfVq0WFEX0zrKBDK5hz",
-DB="Farm_Informatics"
-
-)
+import os
 # connect to aws
+load_dotenv()
 conn = pymysql.connect(
-        host = config['HOST_NAME'],
-        port = int(config['PORT_NO']),
-        user = config['USER_NAME'],
-        password = config['PASSWORD'],
-        db = config['DB'],
+        host = os.environ['HOST_NAME'],
+        port = int(os.environ['PORT_NO']),
+        user = os.environ['USER_NAME'],    
+        password = os.environ['PASSWORD'],
+        db = os.environ['DB'],
         )
-
 
 def get_data_for_scheduling():
     query = "select username,plot_name,start_date,start_time,frequency,email from Plots inner join (select username as u , email from Users) as a where a.u=username"
@@ -102,7 +93,7 @@ def email():
     # set up the SMTP server
     s = smtplib.SMTP(host='smtp.gmail.com', port=587)
     s.starttls()
-    s.login('Agrihelp2022@gmail.com', 'mission2022@')
+    s.login(os.environ['EMAIL'],os.environ['SENDER_PASS'])
 
     # For each contact, send the email:
     for name, email in zip(names, emails):
