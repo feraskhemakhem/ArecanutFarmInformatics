@@ -136,15 +136,31 @@ def irrigation_schedule_input():
 @app.route('/rainfallinput', methods=['GET','POST'])
 def rainfall_input():
     global username
+    # if request.method == "POST":
+    #     _date = request.form.getlist('date')
+    #     _measurement = request.form.getlist('rainfall')
+    #     #save these in db
+    #     db.add_rainfall_day(username, _date, _measurement)
+    #     return render_template('landing.html', variable=username)#landing page
+    # return render_template('rainfall_input.html', variable=username)
+
+    # siri's version
     if request.method == "POST":
-        _date = request.form.getlist('date')
-        _measurement = request.form.getlist('rainfall')
+        _date = request.form.getlist('date')[0]
+        _measurement = request.form.getlist('rainfall')[0]
+        if not str(_date)<= str(datetime.today().date()):
+            raise Exception('wrong date')
+        try:
+            _measurement = float(_measurement)
+        except:
+            raise Exception('wrong data type - rainfall input')
+
+        
         #save these in db
-        db.add_rainfall_day(username, _date, _measurement)
         return render_template('landing.html', variable=username)#landing page
-    return render_template('rainfall_input.html', variable=username)
 
 
+    return render_template('rainfall_input.html', varaible=username)
 
 if '__main__' == __name__:
     app.run()
