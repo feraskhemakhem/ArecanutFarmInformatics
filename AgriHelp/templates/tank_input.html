@@ -27,118 +27,161 @@
 		
 		document.getElementById(divname).style.display = "block";
 	}
+
+	function validateForm()
+	{
+		var selected_shape = document.querySelector('input[name = "TANK"]:checked');
+		if(selected_shape != null){
+			if(selected_shape.value == 'circle') {
+				var circ_dia = document.getElementById("diameter");
+				var circ_ht = document.getElementById("cheight");
+				if(circ_dia.value == '') {
+					alert("Please enter cylinder diameter!");
+					return false;
+				}
+				if(circ_ht.value == '') {
+					alert("Please enter cylinder height!");
+					return false;
+				}
+				
+			}
+			else if(selected_shape.value == 'rectangle') {
+				var rect_w = document.getElementById("width");
+				var rect_d = document.getElementById("depth");
+				var rect_l = document.getElementById("length");
+				if(rect_w.value == '') {
+					alert("Please enter rectangle width!");
+					return false;
+				}
+				if(rect_d.value == '') {
+					alert("Please enter rectangle depth!");
+					return false;
+				}
+				if(rect_l.value == '') {
+					alert("Please enter rectangle length!");
+					return false;
+				}
+			}
+			else if(selected_shape.value == 'trapezoid') {
+				var trap_t1 = document.getElementById("top1");
+				var trap_t2 = document.getElementById("top2");
+				var trap_b1 = document.getElementById("base1");
+				var trap_b2 = document.getElementById("base2");
+				var trap_ht = document.getElementById("height");
+				if(trap_t1.value == '') {
+					alert("Please enter trapezoid first top measurement!");
+					return false;
+				}
+				if(trap_t2.value == '') {
+					alert("Please enter trapezoid second top measurement!");
+					return false;
+				}
+				if(trap_b1.value == '') {
+					alert("Please enter trapezoid first base measurement!");
+					return false;
+				}
+				if(trap_b2.value == '') {
+					alert("Please enter trapezoid second base measurement!");
+					return false;
+				}
+				if(trap_ht.value == '') {
+					alert("Please enter trapezoid height!");
+					return false;
+				}
+			}
+		}
+		else {
+				alert("Nothing checked.");
+				return false;
+			}
+		return true;
+	}
 </script>
-<body onload="onLoadDisplay()">
-	<br><br>
- 	<br><br>
-	<div class="container pt-4" >
-			<div class="well agileits-top-2">
-				<h2>Tank Details</h2>
-				<form action="{{url_for('tank_input')}}" method="POST">
-					  <div class="form-group row" name="tank_name" style="font-size: 1.2em;">
-					    <!--<label for="TankName" class="col-sm-2 col-form-label">Tank Name:</label>-->
-					    <div class="col-sm-10">
-					      <input type="text" class="form-control" id="tank_name" placeholder="Tank Name" required="">
-					    </div>
-					  </div>
-					  <div id="tank-radio-group">
-					  <fieldset class="form-group">
-					    <div class="row margin-2">
-					      <legend class="col-form-label col-sm-2 pt-0 margin-2" style="font-size: 1.2em;">Shape of the tank:</legend>
-						  <br></br>
-					      <div class="col-sm-2">
-					        <div class="form-check">
-					          	<input class="form-check-input" type="radio" name="TANK" id="rectangle" value="rectangle" onclick="showShapeInputs('rectanglediv')" required="">
-					  			<label class="form-check-label" for="rectangle">
-					            Rectangle
-					          </label>
-					        </div>
-					        <div class="form-check">
-					          <input class="form-check-input" type="radio" name="TANK" id="trapezoid" value="trapezoid" onclick="showShapeInputs('trapezoiddiv')" required="">
-							  <label class="form-check-label" for="trapezoid">
-							  Trapezoid
-					          </label>
-					        </div>
-					        <div class="form-check">
-					          <input class="form-check-input" type="radio" name="TANK" id="circle" value="circle" onclick="showShapeInputs('circlediv')" required="">
-							  <label class="form-check-label" for="circle">
-							  Circle
-					          </label>
-					        </div>
-					      </div>
-					    </div>
-					  </fieldset>
 
-					  <div class="margin-2" id="rectanglediv">
-		              <p class="margin-2" style="font-size: 1.2em;">Tank Dimensions(in metres):<p>
-		            	<div class="form-group vertical-input-group" style="padding-bottom: 60px;">
-					    <div class="col-sm-10">
-					    <!--<p style="font-size: 1.2em;">Rectangle Tank:</p>-->
-					    <!--<<div class="input-group">-->
-					    	<!--<label for="length" class="col-sm-2 col-form-label">Length:</label>-->
-		                	<input class="form-control" type="number" id="length" name="length" placeholder="Length" step="0.001" min="0.1" required="">
-					    <!--</div>-->
-		                <!--<div class="input-group">-->
-		                <!--<label for="width" class="col-sm-2 col-form-label">Width/Breadth:</label>-->
-		                <input class="form-control" type="number" id="width" name="width" placeholder="Width/Breadth" step="0.001" min="0.1" required="">
-		                <!--</div>-->
-		                <!--<div class="input-group">-->
-		                <!-- <label for="depth" class="col-sm-2 col-form-label">Height/Depth:</label>-->
-		                <input class="form-control" type="number" id="depth" name="depth" placeholder="Height/Depth" step="0.001" min="0.1" required="">
-		            	<!--</div>-->
-		            	</div>
-		           		</div>
+<br><br>
+<br><br>
+<div class="container pt-4" >
+<div class="well agileits-top-2">
 
-		           	</div>
-		            <div class="margin-2" id="trapezoiddiv">
-		            <p class="margin-2" style="font-size: 1.2em;">Tank Dimensions(in metres):</p>
-		            <div class="form-group vertical-input-group" style="padding-bottom: 120px;">
-					    <!--<p style="font-size: 1.2em;">Trapezoidal Tank:</p>-->
-					    <div class="col-sm-10">
-		                <!--<label for="base1" class="col-sm-2 col-form-label">Base 1 (Lower Non-parallel side):</label>-->
-		                <input class="form-control" type="number" id="base1" name="base1" placeholder="Base 1 (Base Rectangular side 1)" step="0.001" min="0.1" required="">
-		                <!--<label for="base2" class="col-sm-2 col-form-label">Base 2 (Lower Non-parallel side):</label>-->
-		                <input class="form-control" type="number" id="base2" name="base2" placeholder="Base 2 (Base Rectangular side 2)" step="0.001" min="0.1" required="">
-		                <!--<label for="top1" class="col-sm-2 col-form-label">Top 1 (Upper Non-parallel side):</label>-->
-		                <input class="form-control" type="number" id="top1" name="top1" placeholder="Top 1 (Top Rectangular side 1)" step="0.001" min="0.1" required="">
-		                <!--<label for="top2" class="col-sm-2 col-form-label">Top 2 (Upper Non-parallel side):</label>-->
-		                <input class="form-control" type="number" id="top2" name="top2" placeholder="Top 2 (Top Rectangular side 2)" step="0.001" min="0.1" required="">
-		                <!--<label for="height" class="col-sm-2 col-form-label">Total Height:</label>-->
-		                <input class="form-control" type="number" id="height" name="height" placeholder="Total Height" step="0.001" min="0.1" required="">
-		            </div>
-		        	</div>
+<form id="tankform" action="{{ url_for('tank_input') }}"  method="post" onsubmit="return validateForm(this)">
+	<body onload="onLoadDisplay()">
+	
+		<h2>Tank Details</h2>
+		  <div class="form-group row" style="font-size: 1.2em;">
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" id="tank_name" name="tank_name" placeholder="Tank Name" required>
+		    </div>
+		  </div>
+
+		<div id="tank-radio-group">
 			
-		        	</div>
-		        	<div class="margin-2" id="circlediv">
-		        	<p class="margin-2" style="font-size: 1.2em;">Tank Dimensions(in metres):<p>
-		        	<div class="form-group vertical-input-group" style="padding-bottom: 30px;">
-					    <div class="col-sm-10">
-		            	
-		            	<!--<p style="font-size: 1.2em;">Circular Tank:</p>-->
-		            	<!--<label for="diameter" class="col-sm-2 col-form-label">Diameter:</label>-->
-		                <input class="form-control" type="number" id="diameter" name="diameter" placeholder="Diameter" step="0.001" min="0.1" required="">
-		                <!--<label for="depth" class="col-sm-2 col-form-label">Height/Depth:</label>-->
-		                <input class="form-control" type="number" id="depth" name="depth" placeholder="Height/Depth" step="0.001" min="0.1" required="">
-		            	</div>
-		            </div>
-		        	</div>
-					
+			    <div class="row margin-2">
+			        <legend class="col-form-label col-sm-2 pt-0 margin-2" style="font-size: 1.2em;">Shape of the tank:</legend>
+				    <br></br>
+			        <div class="col-sm-2">
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="TANK" id="rectangle" value="rectangle" onclick="showShapeInputs('rectanglediv')" required>
+							<label class="form-check-label" for="rectangle">
+							Rectangle
+							</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="TANK" id="trapezoid" value="trapezoid" onclick="showShapeInputs('trapezoiddiv')" required>
+							<label class="form-check-label" for="trapezoid">
+							Trapezoid
+							</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="TANK" id="circle" value="circle" onclick="showShapeInputs('circlediv')" required>
+							<label class="form-check-label" for="circle">
+							Circle
+							</label>
+						</div>
+			        </div>
+			    </div>
+			  
+
+			<div class="margin-2" id="rectanglediv">
+                <p class="margin-2" style="font-size: 1.2em;">Tank Dimensions(in metres):<p>
+            	<div class="form-group vertical-input-group" style="padding-bottom: 60px;">
+			    <div class="col-sm-10">
+                	<input class="form-control" type="number" id="length" name="length" placeholder="Length" step="0.001" min="0.1">
+                	<input class="form-control" type="number" id="width" name="width" placeholder="Width/Breadth" step="0.001" min="0.1">
+                	<input class="form-control" type="number" id="depth" name="depth" placeholder="Height/Depth" step="0.001" min="0.1">
+                </div>
+           		</div>
+           	</div>
+
+            <div class="margin-2" id="trapezoiddiv">
+				<p class="margin-2" style="font-size: 1.2em;">Tank Dimensions(in metres):</p>
+				<div class="form-group vertical-input-group" style="padding-bottom: 120px;">
+				<div class="col-sm-10">
+					<input class="form-control" type="number" id="base1" name="base1" placeholder="Base 1 (Base Rectangular side 1)" step="0.001" min="0.1" >
+					<input class="form-control" type="number" id="base2" name="base2" placeholder="Base 2 (Base Rectangular side 2)" step="0.001" min="0.1" >
+					<input class="form-control" type="number" id="top1" name="top1" placeholder="Top 1 (Top Rectangular side 1)" step="0.001" min="0.1" >
+					<input class="form-control" type="number" id="top2" name="top2" placeholder="Top 2 (Top Rectangular side 2)" step="0.001" min="0.1" >
+					<input class="form-control" type="number" id="height" name="height" placeholder="Total Height" step="0.001" min="0.1" >
 				</div>
-					<br></br>
-					  <div class="form-group row">
-					    <div class="col-sm-10">
-							<center><input type="submit" class="btn btn-md btn-primary" value="Save">
-					      <input type="reset" class="btn btn-primary" onclick="showShapeInputs()" value="Cancel"></center>
-					    </div>
-					  </div>
-					  <br></br>
-					  
-					</form>
-					
-			</div>
-		
-	</div>
+				</div>
+        	</div>
 
-</body>
-
+        	<div class="margin-2" id="circlediv">
+				<p class="margin-2" style="font-size: 1.2em;">Tank Dimensions(in metres):<p>
+				<div class="form-group vertical-input-group" style="padding-bottom: 30px;">
+				<div class="col-sm-10">
+					<input class="form-control" type="number" id="diameter" name="diameter" placeholder="Diameter" step="0.001" min="0.1">
+					<input class="form-control" type="number" id="cheight" name="cheight" placeholder="Height/Depth" step="0.001" min="0.1">
+				</div>
+				</div>
+        	</div>
+			
+	    </div>
+	    <br></br>
+		<center><input type="submit" class="btn btn-md btn-primary" value="Save">
+		<input type="reset" class="btn btn-md btn-primary" onclick="onLoadDisplay()" value="Cancel"></center>
+	   <br></br>
+	</body>
+</form>
+</div>
+</div>
 {%endblock%}
