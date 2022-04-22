@@ -8,9 +8,8 @@ Created on Sun Mar 13 21:08:44 2022
 import unittest
 import app as AFI_UI
 
-
 class Testapp(unittest.TestCase):
-    
+
     def setUp(self):
        AFI_UI.app.testing = True
        self.app = AFI_UI.app.test_client()
@@ -40,6 +39,17 @@ class Testapp(unittest.TestCase):
         assert 'name="Username"' in html
         assert 'name="password"' in html
         assert 'name="submit"' in html
+    
+    def test_tank_input_form(self):
+        response = self.app.post('/tankinput')
+        assert response.status_code == 200
+        html = response.get_data(as_text=True)
+
+        # make sure all the fields are included
+        assert 'name="tank_name"' in html
+        assert 'name="TANK"' in html
+        assert 'name="submit"' in html
+        assert 'name="cancel"' in html
 
 if __name__ == '__main__':
     unittest.main()
