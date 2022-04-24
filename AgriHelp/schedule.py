@@ -1,3 +1,4 @@
+from unicodedata import name
 import pymysql
 import datetime 
 import smtplib
@@ -5,7 +6,10 @@ from dotenv import load_dotenv
 from string import Template
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import collections
 import os
+
+
 # connect to aws
 load_dotenv()
 conn = pymysql.connect(
@@ -17,7 +21,7 @@ conn = pymysql.connect(
         )
 
 def get_data_for_scheduling():
-    query = "select username,plot_name,start_date,start_time,frequency,email from Plots inner join (select username as u , email from Users) as a where a.u=username"
+    query = "select username,email,plot_name,start_date,start_time,frequency from Plots inner join (select username as u , email from Users) as a where a.u=username"
     output = []
     with conn.cursor() as curr:
         curr.execute(query )
@@ -29,6 +33,7 @@ def get_data_for_scheduling():
         
     return output
 
+#get rows from get_data_for_scheduling
 def give_emailing_rows(data):
     current_date = datetime.datetime.today().date()
     output = []
@@ -38,42 +43,6 @@ def give_emailing_rows(data):
             output.append(each_row)
     return output
 
-
-
-
-def sending_emails(data):
-    # set up the SMTP server
-    server = smtplib.SMTP(host='smtp.gmail.com', port=587)
-    server.starttls()
-    server.login('rimsha.maredia98@gmail.com', 'Rimsha123')
-
-    
-    names = ['siri']
-    emails  = ['siri.pranitha1012@gmail.com']
-    
-    
-    # For each contact, send the email:
-    for each_row in data:
-        msg = MIMEMultipart()      
-        message = f"This is friendly reminder to water the irrigation plot {each_row['plot_name']} at time {str(each_row['start_time'])} today\n\nRegards,\nArecanut Farm Informatics"
-        # Prints out the message body for our sake
-        print(message)
-
-        # setup the parameters of the message
-        msg['From']= 'Arecanut Farm Informatics'
-        msg['To']= each_row['email']
-        msg['Subject']=f"Irrigation reminder for {each_row['plot_name']} "
-        
-        # add in the message body
-        msg.attach(MIMEText(message, 'plain'))
-        
-        # send the message via the server set up earlier.
-        server.send_message(msg)
-        del msg
-        
-    # Terminate the SMTP session and close the connection
-    server.quit()
-    
 def send_email():
     email_user = 'rimsha.maredia@gmail.com'
     server = smtplib.SMTP ('smtp.gmail.com', 587)
@@ -85,40 +54,63 @@ def send_email():
     server.sendmail(email_user, email_user, message)
     server.quit()
 
-def email():
-    names = ['siri']
-    emails  = ['siri@tamu.edu']
+def email(data):
+
+    names = getCol(data,'username')
+    emails = getCol(data,'email')
+    plot_names = getCol(data,'plot_name')
+    start_times = getCol(data,'start_time')
+
+
     #message_template = read_template('message.txt')
 
     # set up the SMTP server
     s = smtplib.SMTP(host='smtp.gmail.com', port=587)
     s.starttls()
     s.login(os.environ['EMAIL'],os.environ['SENDER_PASS'])
-
-    # For each contact, send the email:
-    for name, email in zip(names, emails):
-        msg = MIMEMultipart()      
-        message = 'This is a friendly reminder that your irrigation is scheduled from 9:00am to 12:00pm'
-        # Prints out the message body for our sake
+    for name,email,plot,start_time in zip(names,emails,plot_names,start_times):
+        msg = MIMEMultipart()
+        message = 'Hello ' + name + ' This is a friendly reminder that your irrigation is scheduled at ' + str(start_time) + ' in plot ' + str(plot)
         print(message)
-
-        # setup the parameters of the message
-        msg['From']=name
-        msg['To']=email
-        msg['Subject']="Upcoming Irrigation Reminder"
-        
-        # add in the message body
-        msg.attach(MIMEText(message, 'plain'))
-        
-        # send the message via the server set up earlier.
+        message = str(message)
+        msg['From']='Agrihelp Team'
+        msg['To']= email
+        msg['Subject'] ="Upcoming Irrigation Reminder"
+        message = MIMEText(message)
+        msg.attach(message)
         s.send_message(msg)
-        del msg
+
+        #del msg
         
     # Terminate the SMTP session and close the connection
     s.quit()
 
+def flatten(x):
+    try:
+        collectionsAbc = collections.abc
+    except AttributeError:
+        collectionsAbc = collections
 
+    if isinstance(x, dict) :
+        return [x]
+    elif isinstance(x, collectionsAbc.Iterable) :
+        return [a for i in x for a in flatten(i)]
+    else:
+        return [x]
 
+def getCol(data,col):
+    data = flatten(data)
+    ans = []
+    for curr in data:
+        ans.append(curr[col])
+    return ans
 
 if __name__ == '__main__':
-    email()
+    #email()
+    #0 6 * * *" 
+    ans = get_data_for_scheduling()
+    temp = give_emailing_rows(ans)
+    email(temp)
+
+
+  
