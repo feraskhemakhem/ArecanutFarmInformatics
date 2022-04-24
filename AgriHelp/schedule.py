@@ -70,6 +70,20 @@ def email(data):
     s.login(os.environ['EMAIL'],os.environ['SENDER_PASS'])
     for name,email,plot,start_time in zip(names,emails,plot_names,start_times):
         msg = MIMEMultipart()
+        html = """\
+            <html>
+                <body style="background-color:#D4D6CF;">
+                    <span style="opacity: 0"> {{ randomness }} </span>
+                    <h1 style="color:#DBA40E;">Irrigation Reminder</h1>
+                   <h2 style="color:#013A20;">Hello XYZ User</h2>
+                    <p><h3 style="color:#3F4122;">This is a friendly reminder that your irrigation is scheduled at <br>
+                     """ +str(start_time)+ """ in plot """ +str(plot)+ """
+                    </h3></p>
+                    <span style="opacity: 0"> {{ randomness }} </span>
+                 </body>
+            </html>
+            """
+        temp = MIMEText(html, 'html')
         message = 'Hello ' + name + ' This is a friendly reminder that your irrigation is scheduled at ' + str(start_time) + ' in plot ' + str(plot)
         print(message)
         message = str(message)
@@ -77,7 +91,7 @@ def email(data):
         msg['To']= email
         msg['Subject'] ="Upcoming Irrigation Reminder"
         message = MIMEText(message)
-        msg.attach(message)
+        msg.attach(temp)
         s.send_message(msg)
 
         #del msg
