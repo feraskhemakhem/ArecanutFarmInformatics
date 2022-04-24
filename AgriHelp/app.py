@@ -62,15 +62,40 @@ def signup_page():
         return render_template('landing.html', variable=username)
     return render_template('signup.html')
 
-@app.route('/tank_input', methods=['GET', 'POST'])
+@app.route('/tankinput', methods=['GET', 'POST'])
 def tank_input():
     # if we get a form request to add tank details
+    global username
     if request.method == 'POST':
         _tank_name = request.form.get('tank_name')
+        _tank_shape = request.form.get('TANK')
+        _tank_dimensions = []
+        print(_tank_name, _tank_shape)
+        if _tank_shape == 'circle':
+            circ_dia = request.form.get('diameter')
+            circ_ht = request.form.get('cheight')
+            _tank_dimensions.extend([circ_dia, circ_ht])
+        elif _tank_shape == 'rectangle':
+            rect_l = request.form.get('length')
+            rect_d = request.form.get('depth')
+            rect_w = request.form.get('width')
+            _tank_dimensions.extend([rect_l, rect_d, rect_w])
+        else:
+            trap_t1 = request.form.get('top1')
+            trap_t2 = request.form.get('top2')
+            trap_b1 = request.form.get('base1')
+            trap_b2 = request.form.get('base2')
+            trap_ht = request.form.get('height')
+            _tank_dimensions.extend([trap_t1, trap_t2, trap_b1,trap_b2, trap_ht])
+        try:
+            db.add_tank_input(username, _tank_name, _tank_shape, _tank_dimensions)
+            #print("Tank input added successfully")
+        except Exception as e:
+            #print(e)
+            return render_template('tank_input.html', var=e)
+        return render_template('landing.html', variable=username)
 
-        return render_template('landing.html')
-
-    return render_template('tank_input.html')
+    return render_template('tank_input.html', variable=username)
 
 @app.route('/plotinput', methods=['GET','POST'])
 def plot_input():
@@ -143,7 +168,6 @@ def rainfall_input():
     #     db.add_rainfall_day(username, _date, _measurement)
     #     return render_template('landing.html', variable=username)#landing page
     # return render_template('rainfall_input.html', variable=username)
-
     # siri's version
     if request.method == "POST":
         _date = request.form.getlist('date')[0]
