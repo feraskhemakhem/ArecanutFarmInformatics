@@ -119,12 +119,13 @@ def getCol(data,col):
         ans.append(curr[col])
     return ans
 
-if __name__ == '__main__':
-    #email()
-    #0 6 * * *" 
+def execute():
     ans = get_data_for_scheduling()
     temp = give_emailing_rows(ans)
     email(temp)
+
+if __name__ == '__main__':
+    execute()
 
 
   
