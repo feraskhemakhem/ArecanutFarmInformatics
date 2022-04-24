@@ -173,13 +173,13 @@ def add_tank_input(username, tank_name, tank_shape, dimensions):
     with conn.cursor() as curr:
         # the shape will determine the number of dimensions to populate
         # automatically populate the keyword string based on shape
-        if (tank_shape == 'Rectangle'):
-            curr.execute("INSERT INTO Tanks (username, tank_name, tank_shape, dimension_1, dimension_2, dimension_3) VALUES %s, %s, %s, %s, %s, %s", (username, tank_name, tank_shape, dimensions[0], dimensions[1], dimensions[2]))
-        elif (tank_shape == 'Trapezoid'):
-            curr.execute("INSERT INTO Tanks (username, tank_name, tank_shape, dimension_1, dimension_2, dimension_3, dimension_4, dimension_5) VALUES %s, %s, %s, %s, %s, %s, %s, %s", (username, tank_name, tank_shape, dimensions[0], dimensions[1], dimensions[2], dimensions[3], dimensions[4]))
-        elif (tank_shape == 'Circle'):
-            curr.execute("INSERT INTO Tanks (username, tank_name, tank_shape, dimension_1, dimension_2) VALUES %s, %s, %s, %s, %s", (username, tank_name, tank_shape, dimensions[0], dimensions[1]))
-        curr.commit()
+        if (tank_shape == 'rectangle'):
+            curr.execute("INSERT INTO Tanks (username, tank_name, tank_shape, dimension_1, dimension_2, dimension_3) VALUES (%s, %s, %s, %s, %s, %s)", (username, tank_name, tank_shape, dimensions[0], dimensions[1], dimensions[2]))
+        elif (tank_shape == 'trapezoid'):
+            curr.execute("INSERT INTO Tanks (username, tank_name, tank_shape, dimension_1, dimension_2, dimension_3, dimension_4, dimension_5) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (username, tank_name, tank_shape, dimensions[0], dimensions[1], dimensions[2], dimensions[3], dimensions[4]))
+        elif (tank_shape == 'circle'):
+            curr.execute("INSERT INTO Tanks (username, tank_name, tank_shape, dimension_1, dimension_2) VALUES (%s, %s, %s, %s, %s)", (username, tank_name, tank_shape, dimensions[0], dimensions[1]))
+        conn.commit()
 
 
 """
