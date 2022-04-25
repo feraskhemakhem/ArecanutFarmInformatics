@@ -86,9 +86,9 @@ Iteration 2: Rainfall, and Plot Inputs (Including Irrigation Schedule)
 # add new rainfall day
 # parameters are string, list, list
 def add_rainfall_day(username, _date, _rainfall_quant):
-    date = _date[0]
+    date = _date
     print(date)
-    rainfall_quant = _rainfall_quant[0]
+    rainfall_quant = _rainfall_quant
     print(rainfall_quant)
     with conn.cursor() as curr:
         # if already exists and not the same val, replace it

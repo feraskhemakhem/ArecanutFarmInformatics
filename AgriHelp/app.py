@@ -165,7 +165,7 @@ def rainfall_input():
     #     _date = request.form.getlist('date')
     #     _measurement = request.form.getlist('rainfall')
     #     #save these in db
-    #     db.add_rainfall_day(username, _date, _measurement)
+    #     
     #     return render_template('landing.html', variable=username)#landing page
     # return render_template('rainfall_input.html', variable=username)
     # siri's version
@@ -179,7 +179,7 @@ def rainfall_input():
         except:
             raise Exception('wrong data type - rainfall input')
 
-        
+        db.add_rainfall_day(username, _date, _measurement)
         #save these in db
         return render_template('landing.html', variable=username)#landing page
 
