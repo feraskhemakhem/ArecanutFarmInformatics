@@ -43,23 +43,12 @@ def give_emailing_rows(data):
             output.append(each_row)
     return output
 
-def send_email():
-    email_user = 'rimsha.maredia@gmail.com'
-    server = smtplib.SMTP ('smtp.gmail.com', 587)
-    server.starttls()
-    server.login(email_user, 'email pass')
-
-    #EMAIL
-    message = 'sending this from python!'
-    server.sendmail(email_user, email_user, message)
-    server.quit()
-
 def email(data):
 
-    names = getCol(data,'username')
-    emails = getCol(data,'email')
-    plot_names = getCol(data,'plot_name')
-    start_times = getCol(data,'start_time')
+    names = getCol(data,'username') #name array
+    emails = getCol(data,'email') #email array
+    plot_names = getCol(data,'plot_name') #plot names array
+    start_times = getCol(data,'start_time') # start time array
 
 
     #message_template = read_template('message.txt')
@@ -68,6 +57,7 @@ def email(data):
     s = smtplib.SMTP(host='smtp.gmail.com', port=587)
     s.starttls()
     s.login(os.environ['EMAIL'],os.environ['SENDER_PASS'])
+    
     for name,email,plot,start_time in zip(names,emails,plot_names,start_times):
         msg = MIMEMultipart()
         html = """\
@@ -84,13 +74,13 @@ def email(data):
             </html>
             """
         temp = MIMEText(html, 'html')
-        message = 'Hello ' + name + ' This is a friendly reminder that your irrigation is scheduled at ' + str(start_time) + ' in plot ' + str(plot)
-        print(message)
-        message = str(message)
+        #message = 'Hello ' + name + ' This is a friendly reminder that your irrigation is scheduled at ' + str(start_time) + ' in plot ' + str(plot)
+        #print(message)
+        #message = str(message)
         msg['From']='Agrihelp Team'
         msg['To']= email
         msg['Subject'] ="Upcoming Irrigation Reminder"
-        message = MIMEText(message)
+        #message = MIMEText(message)
         msg.attach(temp)
         s.send_message(msg)
 
@@ -120,8 +110,12 @@ def getCol(data,col):
     return ans
 
 def execute():
+    #get data from database
     ans = get_data_for_scheduling()
+    
+    #checks which emails to send today by comparing date and frequency
     temp = give_emailing_rows(ans)
+    
     email(temp)
 
 if __name__ == '__main__':
