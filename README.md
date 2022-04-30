@@ -1,2 +1,46 @@
 # ArecanutFarmInformatics
-GitHub repository for the project Arecanut Farm Informatics.
+This code base is the GitHub repository for the project Arecanut Farm Informatics created for the graduate course CSCE 606 - Software Engineering. Setup the project by following the instructions mentioned below:
+
+## Prerequisite
+Verify whether you have installed python by checking its version. To check python version:
+  
+> python -V  
+
+Make sure you have installed pip:
+> python-pip 
+
+## Cloning the project:
+
+* Clone the project code using the following git command and then switch to the cloned project folder:
+
+       HTTPS: git clone https://github.com/feraskhemakhem/ArecanutFarmInformatics.git 
+       OR if using Github CLI: gh repo clone feraskhemakhem/ArecanutFarmInformatics
+       
+       cd ArecanutFarmInformatics/AgriHelp
+
+* Install dependencies, (use sudo if required)    
+
+       pip install -r requirements.txt
+
+* Start application hosting it locally:
+
+       python app.py
+       OR
+       python -m flask run
+       
+Common error faced while running locally is 'Flask ImportError: No Module Named Flask' for which you can create a virtual env by following steps mentioned below:
+      virtualenv flask
+      
+      cd flask
+      
+      source bin/activate
+      
+Now you should see (flask) on the left of the command line. Then proceed to install flask:
+
+      pip install flask
+
+* In the browser go to:
+
+       http://localhost:5000 
+            
+You'd be able to see the landing page of the ArecanutFarmInformatics website from where you can proceed to login or register yourself prior to logging in to check out the available functionalities.
