@@ -51,9 +51,6 @@ You'd be able to see the landing page of the ArecanutFarmInformatics website fro
 
 ## Database Connection and Heroku Deployment
 
-### Database Connection
-* The database is written in MySQL, hosted on an Amazon RDS DB instance. To directly access the database, we use MySQL Workbench. For details on connecting to our database with MySQL Workbench, please refer to this resource: https://aws.amazon.com/premiumsupport/knowledge-center/connect-rds-mysql-workbench/. The parameters needed are all included in the .env of the secret folder.
-
 ### Heroku Deployment
 * In order to deploy to Heroku, first a Heroku app must be created and connected to the codebase. Under the settings tab, add config vars for each key in the .env file of the secret folder (the key is the name, the value is the secret).
       
@@ -62,3 +59,14 @@ You'd be able to see the landing page of the ArecanutFarmInformatics website fro
        heroku ps:scale clock=1
        
 At this point, everything should be running as intended.
+
+### Database Connection
+* Please note that direct connection to the database is NOT required to deploy the project, and is only required if one wishes to look into the tables of the database.
+
+* The database is written in MySQL, hosted on an Amazon RDS DB instance. To directly access the database, we use MySQL Workbench. For details on connecting to our database with MySQL Workbench, please refer to this resource: https://aws.amazon.com/premiumsupport/knowledge-center/connect-rds-mysql-workbench/. The parameters needed are all included in the .env of the secret folder.
+
+* The database's name is _FarmInformatics_, with the following table names:
+    * _Users_, used to store user login data
+    * _Tanks_, used to store information about water tanks
+    * _Rainfall_, used to store information about rainfall on given timeframes
+    * _Plots_, used to store information about the plot(s) of land the user keeps track of
