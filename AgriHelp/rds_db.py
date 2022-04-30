@@ -113,23 +113,31 @@ def add_plot(username, _plot_name, _plot_size):
     with conn.cursor() as curr:
         # if already exists and not the same val, replace it
         # if not in the table, add new entry
-        for i in range(len(_plot_name)):
-            plot_name = _plot_name[i]
-            plot_size = _plot_size[i]
-            curr.execute("SELECT plot_size FROM Plots WHERE username = %s AND plot_name = %s", (username, plot_name))
-            plot_details = curr.fetchone()
-            if plot_details and plot_details[0] != plot_size: # if already exists and not the same value
-                print(plot_details)
-                print(type(plot_details))
-                curr.execute("UPDATE Plots SET plot_size = %s WHERE username = %s AND plot_name = %s", (plot_size, username, plot_name))
-            elif not plot_details: # if does not exist, add new
-                print("elif here")
-                curr.execute("INSERT INTO Plots (username, plot_name, plot_size) VALUES (%s, %s, %s)", (username, plot_name, plot_size))
-            # else, correct value already stored and do nothing!
-            else:
-                return
-            # commit changes if not doing nothing
-            conn.commit()
+
+        curr.execute("DELETE FROM Plots WHERE username = %s;", (username))
+        for each_plot_name,each_plot_size in zip(_plot_name,_plot_size):
+            curr.execute("INSERT INTO Plots (username, plot_name, plot_size) VALUES (%s, %s, %s)", (username, each_plot_name, each_plot_size))
+        conn.commit()
+
+
+
+        # for i in range(len(_plot_name)):
+        #     plot_name = _plot_name[i]
+        #     plot_size = _plot_size[i]
+        #     curr.execute("SELECT plot_size FROM Plots WHERE username = %s AND plot_name = %s", (username, plot_name))
+        #     plot_details = curr.fetchone()
+        #     if plot_details and plot_details[0] != plot_size: # if already exists and not the same value
+        #         print(plot_details)
+        #         print(type(plot_details))
+        #         curr.execute("UPDATE Plots SET plot_size = %s WHERE username = %s AND plot_name = %s", (plot_size, username, plot_name))
+        #     elif not plot_details: # if does not exist, add new
+        #         print("elif here")
+        #         curr.execute("INSERT INTO Plots (username, plot_name, plot_size) VALUES (%s, %s, %s)", (username, plot_name, plot_size))
+        #     # else, correct value already stored and do nothing!
+        #     else:
+        #         return
+        #     # commit changes if not doing nothing
+        #     conn.commit()
 
 # add new plot input
 # parameters are string, list, list

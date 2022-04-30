@@ -108,6 +108,12 @@ def plot_input():
         _plot_names = request.form.getlist('plot_name')
         if _plot_names == []:
             return render_template('landing.html', variable=username)# return landing page
+
+        if len(_plot_names)!=len(set(_plot_names)):
+            return render_template('plot_input.html', rownum=len(_plot_names),
+                           plot_info=zip(n, _plot_names,_plot_sizes), variable=username,
+                           message='Conflicting plot names', condition=True)
+
         _plot_sizes = request.form.getlist('plot_size')
         #store these in db
         db.add_plot(username, _plot_names, _plot_sizes)
@@ -122,7 +128,7 @@ def plot_input():
                                variable=username)
 
     return render_template('plot_input.html', rownum=len(_plot_names),
-                           plot_info=zip(n, _plot_names,_plot_sizes), variable=username)
+                           plot_info=zip(n, _plot_names,_plot_sizes), variable=username, condition=False)
 
 @app.route('/irrigationschedule', methods=['GET','POST'])
 def irrigation_schedule_input():

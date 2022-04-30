@@ -118,6 +118,11 @@
             Add Plot
         </button>
       <center><input class="btn btn-md btn-primary" type="submit" value="Save and Proceed"></center>
+      {%if condition%}
+        <div class="alert alert-danger" role="alert">
+                {{message}}
+           </div>
+      {%endif%}
     </body>
   
     
