@@ -11,6 +11,7 @@ from random import randint
 
 
 import app as AFI_UI
+from rds_db import insert_new_user,get_user,get_user_list,add_plot,conn,get_plot
 
 class TestEndtoEnd(unittest.TestCase):
 
@@ -79,6 +80,50 @@ class TestEndtoEnd(unittest.TestCase):
             )
         assert response.status_code==200
 
+
+class TestDB(unittest.TestCase):
+    def setUp(self):
+        self.user_details= dict(username='testdb',email='testdb@gmail.com',password = 'test_db')
+        self._delete_user()
+
+        insert_new_user(self.user_details['username'], self.user_details['email'], self.user_details['password'], self.user_details['password'])
+
+        self.plot_details = dict( _plot_name='testdb_plot', _plot_size=1)
+        add_plot([self.user_details['username']], [self.plot_details['_plot_name']], [self.plot_details['_plot_size']])
+        
+
+    def _delete_user(self):
+        cur = conn.cursor()
+        
+        cur.execute("SELECT * FROM Users WHERE username = %s", (self.user_details['username']))
+        usr_det = cur.fetchone()
+
+        if usr_det:
+            cur.execute("DELETE FROM Plots WHERE username = %s;", (self.user_details['username']))
+            cur.execute("DELETE FROM Users WHERE username = %s;", (self.user_details['username']))
+            conn.commit()
+
+
+
+        
+
+    def test_user(self):
+        all_users = get_user_list()
+        assert all_users
+        _user_id = get_user(self.user_details['username'], self.user_details['password'])
+        for each in all_users:
+            if each[0]==_user_id:
+                assert each[1]==self.user_details['username']
+                assert each[2]==self.user_details['email']
+                assert each[3]==self.user_details['password']
+                break
+        
+        
+        
+    def test_plot_inputs(self):
+        _plot_details  = get_plot(self.user_details['username'])[0]
+        assert _plot_details[0] == self.plot_details['_plot_name']
+        assert int(_plot_details[1]) == self.plot_details['_plot_size']
 
 
 
