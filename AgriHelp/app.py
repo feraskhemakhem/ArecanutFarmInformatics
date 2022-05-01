@@ -167,14 +167,6 @@ def irrigation_schedule_input():
 @app.route('/rainfallinput', methods=['GET','POST'])
 def rainfall_input():
     global username
-    # if request.method == "POST":
-    #     _date = request.form.getlist('date')
-    #     _measurement = request.form.getlist('rainfall')
-    #     #save these in db
-    #     
-    #     return render_template('landing.html', variable=username)#landing page
-    # return render_template('rainfall_input.html', variable=username)
-    # siri's version
     if request.method == "POST":
         _date = request.form.getlist('date')[0]
         _measurement = request.form.getlist('rainfall')[0]

@@ -18,30 +18,31 @@ conn = pymysql.connect(
         db = os.environ['DB'],
         )
 
-# create table if not already existing (no encryption)
-# cursor = conn.cursor()
-# create_table = """
-# CREATE TABLE IF NOT EXIST Users (user_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, username VARCHAR(31) DEFUALT NULL, email VARCHAR(255) DEFAULT NULL, pswd VARCHAR(255) DEFAULT NULL)
-# """
-# cursor.execute(create_table)
 
-"""
-Iteration 1: User account functions
-"""
 
-# insert new user (no ecryption)
-# exceptions: passwords do not match, username already exists
-# return: user id if successful
 def insert_new_user(username, email, password, password_verify):
-    # if passwords do not match, return false
+    """
+    Inserts new user into the database according to the above credentials. 
+    Throws an error incase the user already exists.
+    Throws an error if password or password2 dont match
+    # Inputs
+    username : username of the user
+    email: email of the user
+    password : password given by the new user
+    password2: password given in the confirm password area by the new user 
+    # Output
+    user id or index of the user we assign internally in our db
+    """
+
+    # if passwords do not match throw exception.
     if password != password_verify:
         raise Exception('Passwords do not match')
-    # check if username already exists or insert new user account
+    
     with conn.cursor() as curr:
-        # check if username already exists
+    
         curr.execute("SELECT * FROM Users WHERE username = %s", (username))
         user_details = curr.fetchone()
-        if user_details: # if username already in use, return -2
+        if user_details: 
             raise Exception('Username already in use')
         # otherwise, add new user
         curr.execute("INSERT INTO Users (username, email, pswd) VALUES (%s, %s, %s)",  (username, email, password))
@@ -50,13 +51,14 @@ def insert_new_user(username, email, password, password_verify):
         curr.execute("SELECT user_id FROM Users WHERE username = %s", (username))
         new_user = curr.fetchone()
         return int(new_user[0])
-    # if connection failed return false
-    # return False
+    
 
-# verify login info given username/password
-# exceptions: user does not exist, password incorrect
-# return: user id if valid
+
+
 def get_user(username, password):
+    """
+    get the user id for a given user name and password details
+    """
     with conn.cursor() as curr:
         # run query and get results
         curr.execute("SELECT user_id, pswd FROM Users WHERE username = %s", (username))
@@ -71,6 +73,9 @@ def get_user(username, password):
             return user_details[0]
 
 def get_user_list():
+    """
+    gives the list of all users present in our database
+    """
     with conn.cursor() as curr:
         curr.execute("SELECT * FROM Users")
         user_list = curr.fetchall()
@@ -79,13 +84,10 @@ def get_user_list():
 
 
 
-"""
-Iteration 2: Rainfall, and Plot Inputs (Including Irrigation Schedule)
-"""
-
-# add new rainfall day
-# parameters are string, list, list
 def add_rainfall_day(username, _date, _rainfall_quant):
+    """
+    Adds the rainfall details for a given date to specified user
+    """
     date = _date
     print(date)
     rainfall_quant = _rainfall_quant
@@ -107,9 +109,10 @@ def add_rainfall_day(username, _date, _rainfall_quant):
         # commit changes if not doing nothing
         conn.commit()
 
-# add new plot input
-# parameters are string, list, list
 def add_plot(username, _plot_name, _plot_size):
+    """
+    Adds a new plot and its details in the Plots table for a user
+    """
     with conn.cursor() as curr:
         # if already exists and not the same val, replace it
         # if not in the table, add new entry
@@ -121,28 +124,13 @@ def add_plot(username, _plot_name, _plot_size):
 
 
 
-        # for i in range(len(_plot_name)):
-        #     plot_name = _plot_name[i]
-        #     plot_size = _plot_size[i]
-        #     curr.execute("SELECT plot_size FROM Plots WHERE username = %s AND plot_name = %s", (username, plot_name))
-        #     plot_details = curr.fetchone()
-        #     if plot_details and plot_details[0] != plot_size: # if already exists and not the same value
-        #         print(plot_details)
-        #         print(type(plot_details))
-        #         curr.execute("UPDATE Plots SET plot_size = %s WHERE username = %s AND plot_name = %s", (plot_size, username, plot_name))
-        #     elif not plot_details: # if does not exist, add new
-        #         print("elif here")
-        #         curr.execute("INSERT INTO Plots (username, plot_name, plot_size) VALUES (%s, %s, %s)", (username, plot_name, plot_size))
-        #     # else, correct value already stored and do nothing!
-        #     else:
-        #         return
-        #     # commit changes if not doing nothing
-        #     conn.commit()
-
-# add new plot input
-# parameters are string, list, list
 def add_irrigation_schedule(username, _plot_name, _start_date, _start_time, _end_time, _freq):
-    print(_plot_name)
+    """
+    Adds irrigation schedule for a corresponding user and plot. 
+    Takes in the start date, start time , end time,frequency and adds it to the database 
+    which are further used to calculate irrigation schedule
+    """
+    
     with conn.cursor() as curr:
         # if already exists and not the same val, replace it
         # if not in the table, add new entry
@@ -156,28 +144,31 @@ def add_irrigation_schedule(username, _plot_name, _start_date, _start_time, _end
             curr.execute("UPDATE Plots SET start_date = %s, start_time = %s, end_time = %s, frequency = %s WHERE username = %s AND plot_name = %s", (start_date, start_time, end_time, freq, username, plot_name))
         conn.commit()
 
-# get plot details
+
 def get_plot(username):
+    """
+    gives all plot details corresponding to a user
+    """
     with conn.cursor() as curr:
         curr.execute("SELECT plot_name, plot_size FROM Plots WHERE username = %s", (username))
         plot_details = curr.fetchall()
         return plot_details
 
-# get irrigation schedule details
 def get_irrigation_schedule(username):
+    """
+    returns the irrigation schedules of all plots corresponding to a user name
+    """
     with conn.cursor() as curr:
         curr.execute("SELECT start_date, start_time, end_time, frequency FROM Plots WHERE username = %s", (username))
         irrigation_details = curr.fetchall()
         return irrigation_details
 
 
-"""
-Iteration 3: Tank Input
-"""
 
-# add new tank to database
-# all inputs are strings except dimensions, which is an array of strings
 def add_tank_input(username, tank_name, tank_shape, dimensions):
+    """
+    adds new tank details corresponding to a username
+    """
     with conn.cursor() as curr:
         # the shape will determine the number of dimensions to populate
         # automatically populate the keyword string based on shape
@@ -190,12 +181,11 @@ def add_tank_input(username, tank_name, tank_shape, dimensions):
         conn.commit()
 
 
-"""
-Helper Functions
-"""
 
-# get DB
 def get_db(table_name):
+    """
+    get details corresponding to db
+    """
     with conn.cursor() as curr:
         curr.execute("SELECT * FROM %s", (table_name))
         table_contents = curr.fetchall()
