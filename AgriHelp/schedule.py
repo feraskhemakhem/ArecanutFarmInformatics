@@ -21,6 +21,9 @@ conn = pymysql.connect(
         )
 
 def get_data_for_scheduling():
+    """
+    Gets all the details of the user and corresponding plot details present in db
+    """
     query = "select username,email,plot_name,start_date,start_time,frequency from Plots inner join (select username as u , email from Users) as a where a.u=username"
     output = []
     with conn.cursor() as curr:
@@ -33,8 +36,11 @@ def get_data_for_scheduling():
         
     return output
 
-#get rows from get_data_for_scheduling
+
 def give_emailing_rows(data):
+    """
+    gives the rows in data for which we have to send emails today.
+    """
     current_date = datetime.datetime.today().date()
     output = []
     for each_row in data:
@@ -44,6 +50,9 @@ def give_emailing_rows(data):
     return output
 
 def email(data):
+    """
+    send emails to all rows present in the data
+    """
 
     names = getCol(data,'username') #name array
     emails = getCol(data,'email') #email array
@@ -51,8 +60,7 @@ def email(data):
     start_times = getCol(data,'start_time') # start time array
 
 
-    #message_template = read_template('message.txt')
-
+    
     # set up the SMTP server
     s = smtplib.SMTP(host='smtp.gmail.com', port=587)
     s.starttls()
@@ -65,7 +73,7 @@ def email(data):
                 <body style="background-color:#D4D6CF;">
                     <span style="opacity: 0"> {{ randomness }} </span>
                     <h1 style="color:#DBA40E;">Irrigation Reminder</h1>
-                   <h2 style="color:#013A20;">Hello XYZ User</h2>
+                   <h2 style="color:#013A20;">Hello """+str(name)+""" User</h2>
                     <p><h3 style="color:#3F4122;">This is a friendly reminder that your irrigation is scheduled at <br>
                      """ +str(start_time)+ """ in plot """ +str(plot)+ """
                     </h3></p>
@@ -74,22 +82,18 @@ def email(data):
             </html>
             """
         temp = MIMEText(html, 'html')
-        #message = 'Hello ' + name + ' This is a friendly reminder that your irrigation is scheduled at ' + str(start_time) + ' in plot ' + str(plot)
-        #print(message)
-        #message = str(message)
         msg['From']='Agrihelp Team'
         msg['To']= email
         msg['Subject'] ="Upcoming Irrigation Reminder"
-        #message = MIMEText(message)
         msg.attach(temp)
         s.send_message(msg)
 
-        #del msg
         
     # Terminate the SMTP session and close the connection
     s.quit()
 
 def flatten(x):
+    """flattens the dictionary"""
     try:
         collectionsAbc = collections.abc
     except AttributeError:
@@ -103,6 +107,10 @@ def flatten(x):
         return [x]
 
 def getCol(data,col):
+    """
+    takes in the data , and the col name , and converts values
+    corresponding to the col name into a list and returns it
+    """
     data = flatten(data)
     ans = []
     for curr in data:
@@ -110,6 +118,9 @@ def getCol(data,col):
     return ans
 
 def execute():
+    """
+    executes the scheduling email function
+    """
     #get data from database
     ans = get_data_for_scheduling()
     

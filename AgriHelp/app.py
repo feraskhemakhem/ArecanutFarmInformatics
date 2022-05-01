@@ -9,6 +9,10 @@ app = Flask(__name__)
 global username
 
 def get_irrigation_info(username):
+    """
+    gives the list of start dates , start times, endtimes,frequency 
+    of plots corresponding to the given user
+    """
     _irrigation_info = db.get_irrigation_schedule(username)
     _start_date = [i[0] for i in _irrigation_info]
     _start_time = [i[1] for i in _irrigation_info]
@@ -17,6 +21,9 @@ def get_irrigation_info(username):
     return _start_date, _start_time, _end_time, _frequency
 
 def get_plot_info(username):
+    """
+    gives list of plotnames, plot sizes of plots corresponding to a given user
+    """
     _plot_info = db.get_plot(username)
     _plot_names = [i[0] for i in _plot_info]
     _plot_sizes = [i[1] for i in _plot_info]
@@ -26,10 +33,15 @@ def get_plot_info(username):
 
 @app.route('/')
 def home_page():
+    """renders home page"""
     return render_template('home_page.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
+    """
+    this function takes in the user credentails(for logging in), checks them that
+    it is a valid user and renders the landing page on submission.
+    """
     global username
     # if we get a form request to log in
     if request.method == 'POST':
@@ -47,6 +59,10 @@ def login_page():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup_page():
+    """
+    This page takes in the signup credentials of the new user, inserts them to the db,
+    renders the landing page on submission
+    """
     # if we get a form request to sign up
     global username
     if request.method == 'POST':
@@ -64,6 +80,10 @@ def signup_page():
 
 @app.route('/tankinput', methods=['GET', 'POST'])
 def tank_input():
+    """
+    This function takes in the tank details , saves them to the db 
+    and renders landing page on submission
+    """
     # if we get a form request to add tank details
     global username
     if request.method == 'POST':
@@ -99,6 +119,10 @@ def tank_input():
 
 @app.route('/plotinput', methods=['GET','POST'])
 def plot_input():
+    """
+    This function takes in the new plot details , adds them to the database
+    and renders the irrigation input page on submission.
+    """
     global username
     _plot_names, _plot_sizes = get_plot_info(username)
     n = range(1, len(_plot_names)+1)
@@ -132,31 +156,20 @@ def plot_input():
 
 @app.route('/irrigationschedule', methods=['GET','POST'])
 def irrigation_schedule_input():
+    """
+    This function fetches the irrigation schedule data, corresponding to the plots
+    of a user, saves it to the database , and renders the landing page. This whole
+    process is done on submission
+    """
     global username
     _plot_names, _plot_sizes = get_plot_info(username)
     _start_date, _start_time, _end_time, _frequency = get_irrigation_info(username)
-
-    # _irrigation_time = datetime.datetime.strptime(_start_date,''%Y-%m-%d')
-    # _schedule = _irrigation_time + datetime.timedelta(days=frequency)
-
 
     if request.method == "POST":
         start_date = request.form.getlist('start_date')
         start_time = request.form.getlist('start_time')
         end_time = request.form.getlist('end_time')
         frequency = request.form.getlist('frequency')
-        #next_email
-
-        # _irrigation_start = datetime.datetime.strptime(_start_date,''%m-%d-%y')
-        # _schedule = _irrigation_start + datetime.timedelta(days=frequency) #add frequency to date
-        # next_email = _schedule
-
-
-
-
-
-
-
         #save these in db
         db.add_irrigation_schedule(username, _plot_names, start_date, start_time, end_time, frequency)
         return render_template('landing.html', variable=username)#landing page
@@ -166,6 +179,11 @@ def irrigation_schedule_input():
 
 @app.route('/rainfallinput', methods=['GET','POST'])
 def rainfall_input():
+    """
+    This function, fetches the rainfall data , date data from the form 
+    and saves it to the database. It also renders landing page template
+    on submission
+    """
     global username
     if request.method == "POST":
         _date = request.form.getlist('date')[0]

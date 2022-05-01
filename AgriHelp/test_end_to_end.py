@@ -14,13 +14,23 @@ import app as AFI_UI
 from rds_db import insert_new_user,get_user,get_user_list,add_plot,conn,get_plot
 
 class TestEndtoEnd(unittest.TestCase):
+    """
+    end to end testing of our application
+    """
 
     def setUp(self):
+        """
+        sets up the test setup. starts the flask application
+        """
+
        AFI_UI.app.testing = True
        self.app = AFI_UI.app.test_client(self)
        self._register_details()
 
     def _register_details(self):
+        """
+        registers test user details and checks the response
+        """
         try:
             response = self.app.post('/login',
                 data = dict(Username='test',password='test')
@@ -35,15 +45,18 @@ class TestEndtoEnd(unittest.TestCase):
 
 
     def testlogin(self):
+        """tests the login page"""
         response = self.app.post('/login',
             data = dict(Username="test", password="test"))
         assert response.status_code==200
        
     def test_home_page(self):
+        """tests the home page"""
         response = self.app.get("/")
         assert response.status_code == 200        
     
     def test_tank_input_form(self):
+        """tests the tank input form"""
 
         response = self.app.post('/tankinput',
             data= dict(tank_name='tstcir'+str(randint(0,1000000)),
@@ -63,12 +76,14 @@ class TestEndtoEnd(unittest.TestCase):
         assert response.status_code == 200
 
     def test_rainfall_input(self):
+        """tests the rainfall input page"""
         response = self.app.post('/rainfallinput',
             data = dict(date=datetime.today().date(),rainfall = 1) 
             )
         assert response.status_code==200
 
     def test_irrigation_schedule(self):
+        """tests if the irrigation schedule input page"""
         response = self.app.post('/irrigationschedule',
             data = dict(start_date=[datetime.today().date()]*3,
                 start_time = [datetime.now()]*3,
@@ -82,7 +97,9 @@ class TestEndtoEnd(unittest.TestCase):
 
 
 class TestDB(unittest.TestCase):
+    """tests the db functions"""
     def setUp(self):
+        """Inputs a new set of test user and corresponding plots into the db"""
         self.user_details= dict(username='testdb',email='testdb@gmail.com',password = 'test_db')
         self._delete_user()
 
@@ -93,6 +110,10 @@ class TestDB(unittest.TestCase):
         
 
     def _delete_user(self):
+        """
+        deletes user if the test user is already present. This allows us to use the same 
+        details everytime to test instead of creating a new user every time
+        """
         cur = conn.cursor()
         
         cur.execute("SELECT * FROM Users WHERE username = %s", (self.user_details['username']))
@@ -103,11 +124,8 @@ class TestDB(unittest.TestCase):
             cur.execute("DELETE FROM Users WHERE username = %s;", (self.user_details['username']))
             conn.commit()
 
-
-
-        
-
     def test_user(self):
+        """tests if the get_user_list and get_user functions are working properly"""
         all_users = get_user_list()
         assert all_users
         _user_id = get_user(self.user_details['username'], self.user_details['password'])
@@ -121,6 +139,7 @@ class TestDB(unittest.TestCase):
         
         
     def test_plot_inputs(self):
+        """tests if the get_plot function is working properly"""
         _plot_details  = get_plot(self.user_details['username'])[0]
         assert _plot_details[0] == self.plot_details['_plot_name']
         assert int(_plot_details[1]) == self.plot_details['_plot_size']
