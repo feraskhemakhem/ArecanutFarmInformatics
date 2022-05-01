@@ -44,9 +44,10 @@ def give_emailing_rows(data):
     current_date = datetime.datetime.today().date()
     output = []
     for each_row in data:
-        diff = (current_date-each_row['start_date']).days
-        if diff%each_row['frequency']==0:
-            output.append(each_row)
+        if each_row['start_date'] is not None:
+            diff = (current_date-each_row['start_date']).days
+            if diff%each_row['frequency']==0:
+                output.append(each_row)
     return output
 
 def email(data):
